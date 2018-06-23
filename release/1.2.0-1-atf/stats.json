@@ -1,0 +1,37 @@
+[
+    {
+        "name": "dist/0.1.2.0-1-atf-RELEASE.chunk.js",
+        "size": 32076,
+        "sizeGz": 8730
+    },
+    {
+        "name": "dist/1.1.2.0-1-atf-RELEASE.chunk.js",
+        "size": 5658,
+        "sizeGz": 2384
+    },
+    {
+        "name": "dist/2.1.2.0-1-atf-RELEASE.chunk.js",
+        "size": 8651,
+        "sizeGz": 2823
+    },
+    {
+        "name": "dist/hub.1.2.0-1-atf-RELEASE.min.js",
+        "size": 39666,
+        "sizeGz": 11466
+    },
+    {
+        "name": "dist/oil.1.2.0-1-atf-RELEASE.min.js",
+        "size": 64597,
+        "sizeGz": 20007
+    },
+    {
+        "name": "dist/oildevkit.1.2.0-1-atf-RELEASE.min.js",
+        "size": 30494,
+        "sizeGz": 10427
+    },
+    {
+        "name": "dist/oilstub.1.2.0-1-atf-RELEASE.min.js",
+        "size": 1424,
+        "sizeGz": 745
+    }
+]
