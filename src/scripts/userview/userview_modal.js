@@ -174,7 +174,7 @@ function removeOilWrapperFromDOM() {
   // For every render cycle our OIL main DOM node gets removed, in case it already exists in DOM
   if (domNodes.oilWrapper) {
     forEach(domNodes.oilWrapper, function (domNode) {
-      domNode.parentElement.removeChild(domNode);
+      // domNode.parentElement.removeChild(domNode);
     });
   }
 }
