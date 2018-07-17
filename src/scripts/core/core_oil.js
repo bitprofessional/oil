@@ -4,7 +4,7 @@ import { logError, logInfo, logPreviewInfo } from './core_log';
 import { checkOptIn } from './core_optin';
 import { getSoiCookie, isBrowserCookieEnabled, isPreviewCookieSet, removePreviewCookie, removeVerboseCookie, setPreviewCookie, setVerboseCookie } from './core_cookies';
 import { doSetTealiumVariables } from './core_tealium_loading_rules';
-import { getLocale, isPreviewMode, resetConfiguration } from './core_config';
+import { getLocale, isPreviewMode, resetConfiguration, setGdprApplies } from './core_config';
 import { EVENT_NAME_HAS_OPTED_IN, EVENT_NAME_NO_COOKIES_ALLOWED, EVENT_NAME_OIL_SHOWN } from './core_constants';
 import { executeCommandCollection } from './core_command_collection';
 import { manageDomElementActivation } from './core_tag_management';
@@ -57,7 +57,6 @@ export function initOilLayer() {
         sendEventToHostSite(EVENT_NAME_HAS_OPTED_IN);
         executeCommandCollection();
         attachCommandCollectionFunctionToWindowObject();
-        manageDomElementActivation();
       } else {
         /**
          * Any other case, when the user didn't decide before and oil needs to be shown:
@@ -77,9 +76,12 @@ export function initOilLayer() {
 }
 
 function registerDomElementActivationManager() {
-  document.addEventListener('DOMContentLoaded', function () {
-    manageDomElementActivation();
-  });
+  document.addEventListener('DOMContentLoaded', onDomContentLoaded);
+}
+
+function onDomContentLoaded() {
+  document.removeEventListener('DOMContentLoaded', onDomContentLoaded);
+  manageDomElementActivation();
 }
 
 function attachCommandCollectionFunctionToWindowObject() {
@@ -161,6 +163,12 @@ function attachUtilityFunctionsToWindowObject() {
 
   setGlobalOilObject('triggerOptOut', () => {
     handleOptOut();
+  });
+
+  setGlobalOilObject('applyGDPR', () => {
+    setGdprApplies(true);
+    initOilLayer();
+    return 'GDPR applied';
   });
 }
 

@@ -6,6 +6,7 @@ import * as CoreOptIn from '../../../src/scripts/core/core_optin';
 import * as CoreTagManagement from '../../../src/scripts/core/core_tag_management';
 import { waitsForAndRuns } from '../../test-utils/utils_wait';
 import { resetOil } from '../../test-utils/utils_reset';
+import { triggerEvent } from '../../test-utils/utils_events';
 
 describe('core_oil', () => {
 
@@ -22,35 +23,38 @@ describe('core_oil', () => {
 
     initOilLayer();
 
-    // we expect 11 invocations for registered functions and one for CONFIG object itself
-    expect(CoreUtils.setGlobalOilObject).toHaveBeenCalledTimes(12);
+    // we expect 11 invocations for registered functions and THREE for CONFIG object itself
+    expect(CoreUtils.setGlobalOilObject).toHaveBeenCalledTimes(14);
 
-    verifyThatGlobalOilObjectIsSet(1, 'previewModeOn', "setPreviewCookie");
+    verifyThatGlobalOilObjectIsSet(2, 'previewModeOn', "setPreviewCookie");
 
-    verifyThatGlobalOilObjectIsSet(2, 'previewModeOff', 'removePreviewCookie');
+    verifyThatGlobalOilObjectIsSet(3, 'previewModeOff', 'removePreviewCookie');
 
-    verifyThatGlobalOilObjectIsSet(3, 'verboseModeOn', 'setVerboseCookie');
+    verifyThatGlobalOilObjectIsSet(4, 'verboseModeOn', 'setVerboseCookie');
 
-    verifyThatGlobalOilObjectIsSet(4, 'verboseModeOff', 'removeVerboseCookie');
+    verifyThatGlobalOilObjectIsSet(5, 'verboseModeOff', 'removeVerboseCookie');
 
-    verifyThatGlobalOilObjectIsSet(5, 'reload', 'resetConfiguration');
-    verifyThatGlobalOilObjectIsSet(5, 'reload', 'initOilLayer');
+    verifyThatGlobalOilObjectIsSet(6, 'reload', 'resetConfiguration');
+    verifyThatGlobalOilObjectIsSet(6, 'reload', 'initOilLayer');
 
-    verifyThatGlobalOilObjectIsSet(6, 'status', 'getSoiCookie');
+    verifyThatGlobalOilObjectIsSet(7, 'status', 'getSoiCookie');
 
-    verifyThatGlobalOilObjectIsSet(7, 'showPreferenceCenter', 'loadLocale');
-    verifyThatGlobalOilObjectIsSet(7, 'showPreferenceCenter', 'oilShowPreferenceCenter');
+    verifyThatGlobalOilObjectIsSet(8, 'showPreferenceCenter', 'loadLocale');
+    verifyThatGlobalOilObjectIsSet(8, 'showPreferenceCenter', 'oilShowPreferenceCenter');
 
-    verifyThatGlobalOilObjectIsSet(8, 'triggerOptIn', 'loadLocale');
-    verifyThatGlobalOilObjectIsSet(8, 'triggerOptIn', 'handleOptIn');
+    verifyThatGlobalOilObjectIsSet(9, 'triggerOptIn', 'loadLocale');
+    verifyThatGlobalOilObjectIsSet(9, 'triggerOptIn', 'handleOptIn');
 
-    verifyThatGlobalOilObjectIsSet(9, 'triggerSoiOptIn', 'loadLocale');
-    verifyThatGlobalOilObjectIsSet(9, 'triggerSoiOptIn', 'handleSoiOptIn');
+    verifyThatGlobalOilObjectIsSet(10, 'triggerSoiOptIn', 'loadLocale');
+    verifyThatGlobalOilObjectIsSet(10, 'triggerSoiOptIn', 'handleSoiOptIn');
 
-    verifyThatGlobalOilObjectIsSet(10, 'triggerPoiOptIn', 'loadLocale');
-    verifyThatGlobalOilObjectIsSet(10, 'triggerPoiOptIn', 'handlePoiOptIn');
+    verifyThatGlobalOilObjectIsSet(11, 'triggerPoiOptIn', 'loadLocale');
+    verifyThatGlobalOilObjectIsSet(11, 'triggerPoiOptIn', 'handlePoiOptIn');
 
-    verifyThatGlobalOilObjectIsSet(11, 'triggerOptOut', 'handleOptOut');
+    verifyThatGlobalOilObjectIsSet(12, 'triggerOptOut', 'handleOptOut');
+
+    verifyThatGlobalOilObjectIsSet(13, 'applyGDPR', 'setGdprApplies');
+    verifyThatGlobalOilObjectIsSet(13, 'applyGDPR', 'initOilLayer');
   });
 
   it('should execute command collection and attach command collection execution to window object if opt-in is provided', (done) => {
@@ -60,12 +64,13 @@ describe('core_oil', () => {
 
     initOilLayer();
 
-    waitsForAndRuns(() => {
-      return CoreCommandCollection.executeCommandCollection.calls.count() > 0;
-    }, () => {
-      expect(CoreUtils.setGlobalOilObject).toHaveBeenCalledWith('commandCollectionExecutor', executeCommandCollectionSpy);
-      done();
-    }, 2000);
+    waitsForAndRuns(
+      () => CoreCommandCollection.executeCommandCollection.calls.count() > 0,
+      () => {
+        expect(CoreUtils.setGlobalOilObject).toHaveBeenCalledWith('commandCollectionExecutor', executeCommandCollectionSpy);
+        done();
+      },
+      2000);
   });
 
   it('should not execute command collection and attach command collection execution to window object if opt-in is not provided', (done) => {
@@ -78,37 +83,31 @@ describe('core_oil', () => {
     initOilLayer();
 
     waitsForAndRuns(() => {
-      let calls = CoreUtils.setGlobalOilObject.calls;
-      for (let i = 0; i < calls.count(); i++) {
-        if (calls.argsFor(i)[0] === 'commandCollectionExecutor') return true;
-      }
-      return false;
-    }, () => {
-      expect(CoreCommandCollection.executeCommandCollection).not.toHaveBeenCalled();
-      expect(CoreUtils.setGlobalOilObject).toHaveBeenCalledWith('commandCollectionExecutor', executeCommandCollectionSpy);
-      done();
-    }, 2000);
+        let calls = CoreUtils.setGlobalOilObject.calls;
+        for (let i = 0; i < calls.count(); i++) {
+          if (calls.argsFor(i)[0] === 'commandCollectionExecutor') return true;
+        }
+        return false;
+      }, () => {
+        expect(CoreCommandCollection.executeCommandCollection).not.toHaveBeenCalled();
+        expect(CoreUtils.setGlobalOilObject).toHaveBeenCalledWith('commandCollectionExecutor', executeCommandCollectionSpy);
+        done();
+      },
+      2000);
   });
 
-  it('should activate dom elements with consent if opt-in is provided', (done) => {
-    spyOn(CoreOptIn, 'checkOptIn').and.returnValue(Promise.resolve(true));
+  it('should manage dom elements if oil is initialized and page has been loaded', (done) => {
     spyOn(CoreTagManagement, 'manageDomElementActivation').and.callThrough();
 
     initOilLayer();
-    setTimeout(() => {
-      expect(CoreTagManagement.manageDomElementActivation).toHaveBeenCalledTimes(1);
-      done();
-    }, 2000);
+    triggerEvent('DOMContentLoaded');
+    waitsForAndRuns(
+      () => CoreTagManagement.manageDomElementActivation.calls.count() > 0,
+      () => {
+        expect(CoreTagManagement.manageDomElementActivation).toHaveBeenCalledTimes(1);
+        done();
+      },
+      2000);
   });
 
-  it('should not activate dom elements with consent if opt-in is not provided', (done) => {
-    spyOn(CoreOptIn, 'checkOptIn').and.returnValue(Promise.resolve(false));
-    spyOn(CoreTagManagement, 'manageDomElementActivation').and.callThrough();
-
-    initOilLayer();
-    setTimeout(() => {
-      expect(CoreTagManagement.manageDomElementActivation).not.toHaveBeenCalled();
-      done();
-    }, 2000);
-  });
 });

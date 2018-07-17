@@ -13,7 +13,7 @@ oil.js is a lightweight consent manager and cookie banner. It is optimized for l
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fas-ideas%2Foil.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fas-ideas%2Foil?ref=badge_shield)
 [![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=L3gycEdHSG9Ea0JiT3RXbTBjSTl2RUpJUG9vOFh0M3F5dnFrU3pQNkxCUT0tLUw5aEhDalhOTng0R2N2cEh5a3Z5T1E9PQ==--802c6b824e7d37574af5556756b996c65129a2fa)](https://www.browserstack.com/automate/public-build/L3gycEdHSG9Ea0JiT3RXbTBjSTl2RUpJUG9vOFh0M3F5dnFrU3pQNkxCUT0tLUw5aEhDalhOTng0R2N2cEh5a3Z5T1E9PQ==--802c6b824e7d37574af5556756b996c65129a2fa)
 
-[Website](https://oil.axelspringer.com/) | [Full documentation](https://oil.axelspringer.com/docs/last-release) | [Demo-Site with AppNexus](http://www.dieser-ferdinand.de/) | [HTML integration example](https://oil.axelspringer.com/demos/open-source-example.html) | [Release Notes](https://github.com/as-ideas/oil/releases)
+[Website](https://oil.axelspringer.com/) | [Full documentation](https://oil.axelspringer.com/docs/last-release) | [Sandbox](https://oil.axelspringer.com/sandbox/) | [Demo-Site with AppNexus](http://www.dieser-ferdinand.de/) | [HTML integration example](https://oil.axelspringer.com/demos/open-source-example.html) | [Release Notes](https://github.com/as-ideas/oil/releases)
 
 ##### [current roadmap](ROADMAP.md)
 
@@ -113,7 +113,7 @@ You need to add the CMP stub (a small script which stores all requests until the
 
 ```javascript
 <script>
-!function(e){var n={};function t(o){if(n[o])return n[o].exports;var r=n[o]={i:o,l:!1,exports:{}};return e[o].call(r.exports,r,r.exports,t),r.l=!0,r.exports}t.m=e,t.c=n,t.d=function(e,n,o){t.o(e,n)||Object.defineProperty(e,n,{configurable:!1,enumerable:!0,get:o})},t.r=function(e){Object.defineProperty(e,"__esModule",{value:!0})},t.n=function(e){var n=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(n,"a",n),n},t.o=function(e,n){return Object.prototype.hasOwnProperty.call(e,n)},t.p="/",t(t.s=365)}({365:function(e,n,t){"use strict";!function(e,n){e.__cmp||(e.__cmp=function(){function t(){return!(!e.AS_OIL||!e.AS_OIL.commandCollectionExecutor)}(e.attachEvent||e.addEventListener)("message",function(n){e.__cmp.receiveMessage(n)},!1),function e(){if(!(n.getElementsByName("__cmpLocator").length>0))if(n.body){var t=n.createElement("iframe");t.style.display="none",t.name="__cmpLocator",n.body.appendChild(t)}else setTimeout(e,5)}();var o=[],r=function(n,r,a){if("ping"===n)(i=a)&&i({gdprAppliesGlobally:!1,cmpLoaded:t()});else{var c={command:n,parameter:r,callback:a};o.push(c),t()&&e.AS_OIL.commandCollectionExecutor(c)}var i};return r.commandCollection=o,r.receiveMessage=function(e){var n=e&&e.data&&e.data.__cmpCall;n&&o.push({callId:n.callId,command:n.command,parameter:n.parameter,event:e})},r}())}(window,document)}});
+!function(e){var t={};function n(o){if(t[o])return t[o].exports;var r=t[o]={i:o,l:!1,exports:{}};return e[o].call(r.exports,r,r.exports,n),r.l=!0,r.exports}n.m=e,n.c=t,n.d=function(e,t,o){n.o(e,t)||Object.defineProperty(e,t,{configurable:!1,enumerable:!0,get:o})},n.r=function(e){Object.defineProperty(e,"__esModule",{value:!0})},n.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return n.d(t,"a",t),t},n.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},n.p="/",n(n.s=115)}({115:function(e,t,n){"use strict";!function(e,t){e.__cmp||(e.__cmp=function(){function n(){return!(!e.AS_OIL||!e.AS_OIL.commandCollectionExecutor)}(e.attachEvent||e.addEventListener)("message",function(t){e.__cmp.receiveMessage(t)},!1),function e(){if(!(t.getElementsByName("__cmpLocator").length>0))if(t.body){var n=t.createElement("iframe");n.style.display="none",n.name="__cmpLocator",t.body.appendChild(n)}else setTimeout(e,5)}();var o=[],r=function(r,a,c){if("ping"===r)!function(e){if(e){var o=!0,r=t.querySelector('script[type="application/configuration"]#oil-configuration');if(null!==r&&r.text)try{var a=JSON.parse(r.text);a&&a.hasOwnProperty("gdpr_applies_globally")&&(o=a.gdpr_applies_globally)}catch(e){}e({gdprAppliesGlobally:o,cmpLoaded:n()},!0)}}(c);else{var i={command:r,parameter:a,callback:c};o.push(i),n()&&e.AS_OIL.commandCollectionExecutor(i)}};return r.commandCollection=o,r.receiveMessage=function(e){var t=e&&e.data&&e.data.__cmpCall;t&&o.push({callId:t.callId,command:t.command,parameter:t.parameter,event:e})},r}())}(window,document)}});
 </script>
 <script type="text/javascript" src="https://oil.axelspringer.com/release/1.1.0/oil.1.1.0-RELEASE.min.js"></script>
 ```
@@ -164,9 +164,11 @@ For detailed explanations, please visit the [documentation](https://oil.axelspri
 | iabVendorListUrl | URL of the list of vendors to use | https://vendorlist.consensu.org/vendorlist.json
 | iabVendorWhitelist | Array of vendor IDs to allow. If it is set, values in `iabVendorBlacklist` are ignored. | None
 | iabVendorBlacklist | Array of vendor IDs to exclude. | None
+| show_limited_vendors_only | Flag to only show the vendors limited by `iabVendorWhitelist` or `iabVendorBlacklist` in the CPC | false
 | customPurposes | Array of custom purposes defined by publisher. IDs for custom purposes may range from 25-88. | None
 | default_to_optin | Signal opt-in to vendors while still displaying the Opt-In layer to the end user | false
 | advanced_settings_purposes_default | All purposes in the advanced settings layer should be activated by default | false
+| gdpr_applies_globally | Flag to indicate that publisher is from the EU, thus showing the OIL layer to every user. The flag is passed to vendors. | true
 
 ### Texts & Locale Object
 
