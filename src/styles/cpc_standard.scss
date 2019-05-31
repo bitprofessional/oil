@@ -12,13 +12,7 @@
     }
 
     @include media('<=phone') {
-      display: initial;
-      background: $background-color-light;
-      box-shadow: 0 -8px 20px 0 rgba(0, 0, 0, .2);
       padding: 8px;
-      position: fixed;
-      bottom: 0;
-      left: 0;
     }
   }
 
@@ -28,13 +22,8 @@
     }
 
     @include media('<=phone') {
-      display: initial;
       background: $background-color-dark;
-      box-shadow: 0 -8px 20px 0 rgba(0, 0, 0, .2);
       padding: 8px;
-      position: fixed;
-      bottom: 0;
-      left: 0;
     }
   }
 
@@ -94,7 +83,6 @@
   @include media('<=phone') {
     flex: 0;
     display: block;
-    align-self: unset;
   }
 
 }

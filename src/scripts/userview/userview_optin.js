@@ -1,19 +1,19 @@
-import {verifyPowerOptIn} from '../core/core_poi.js';
-import {logInfo} from '../core/core_log.js';
-import {activatePowerOptInWithIFrame, activatePowerOptInWithRedirect} from './userview_poi.js';
-import {sendEventToHostSite} from '../core/core_utils.js';
+import { verifyPowerOptIn } from '../core/core_poi.js';
+import { logInfo } from '../core/core_log.js';
+import { activatePowerOptInWithIFrame, activatePowerOptInWithRedirect } from './userview_poi.js';
+import { sendEventToHostSite } from '../core/core_utils.js';
 import {
   EVENT_NAME_OPT_IN,
+  OIL_PAYLOAD_CONFIG_VERSION,
+  OIL_PAYLOAD_CUSTOM_PURPOSES, OIL_PAYLOAD_CUSTOM_VENDORLIST_VERSION,
   OIL_PAYLOAD_LOCALE_VARIANT_NAME,
   OIL_PAYLOAD_LOCALE_VARIANT_VERSION,
   OIL_PAYLOAD_PRIVACY,
   OIL_PAYLOAD_VERSION,
   PRIVACY_FULL_TRACKING
-} from '../core/core_constants.js';
-import {setSoiCookie} from '../core/core_cookies.js';
-import {isPoiActive} from '../core/core_config.js';
-import {buildSoiCookie} from '../core/core_cookies';
-import {OIL_PAYLOAD_CUSTOM_PURPOSES} from '../core/core_constants';
+} from '../core/core_constants';
+import { setSoiCookie } from '../core/core_cookies';
+import { isPoiActive } from '../core/core_config';
 
 /**
  * Oil optIn power
@@ -21,22 +21,20 @@ import {OIL_PAYLOAD_CUSTOM_PURPOSES} from '../core/core_constants';
  * @param powerOnly - only set Power Opt In (POI), no local site cookie (SOI)
  * @return Promise with updated cookie value
  */
-export function oilPowerOptIn(privacySettings, powerOnly = false) {
+export function oilPowerOptIn(privacySettings) {
   return new Promise((resolve, reject) => {
     let soiCookiePromise;
-    if (!powerOnly) {
-      // Update Oil cookie (site - SOI)
-      soiCookiePromise = setSoiCookie(privacySettings)
-    } else {
-      soiCookiePromise = buildSoiCookie(privacySettings);
-    }
+    // Update Oil cookie (site - SOI)
+    soiCookiePromise = setSoiCookie(privacySettings);
     soiCookiePromise.then((cookie) => {
       let payload = {
         [OIL_PAYLOAD_PRIVACY]: cookie.consentString,
         [OIL_PAYLOAD_VERSION]: cookie.version,
         [OIL_PAYLOAD_LOCALE_VARIANT_NAME]: cookie.localeVariantName,
         [OIL_PAYLOAD_LOCALE_VARIANT_VERSION]: cookie.localeVariantVersion,
-        [OIL_PAYLOAD_CUSTOM_PURPOSES]: cookie.customPurposes
+        [OIL_PAYLOAD_CUSTOM_VENDORLIST_VERSION]: cookie.customVendorListVersion,
+        [OIL_PAYLOAD_CUSTOM_PURPOSES]: cookie.customPurposes,
+        [OIL_PAYLOAD_CONFIG_VERSION]: cookie.configVersion
       };
       if (isPoiActive()) {
         // Update Oil cookie (mypass - POI)
@@ -58,7 +56,6 @@ export function oilPowerOptIn(privacySettings, powerOnly = false) {
     }).catch(error => reject(error));
   });
 }
-
 
 /**
  * Oil SOI optIn

@@ -1,4 +1,4 @@
-import * as CoreVendorInformation from '../../src/scripts/core/core_vendor_information';
+import * as CoreVendorInformation from '../../src/scripts/core/core_vendor_lists';
 import VENDOR_LIST from '../fixtures/vendorlist/simple_vendor_list'
 
 export function setupVendorListSpies() {
@@ -7,5 +7,5 @@ export function setupVendorListSpies() {
   spyOn(CoreVendorInformation, 'getVendorsToDisplay').and.returnValue(VENDOR_LIST.vendors);
   spyOn(CoreVendorInformation, 'getPurposes').and.returnValue(VENDOR_LIST.purposes);
   spyOn(CoreVendorInformation, 'getLimitedVendorIds').and.returnValue(VENDOR_LIST.vendors.map(({id}) => id));
-  spyOn(CoreVendorInformation, 'loadVendorList').and.returnValue(new Promise(resolve => resolve()));
+  spyOn(CoreVendorInformation, 'loadVendorListAndCustomVendorList').and.returnValue(new Promise(resolve => resolve()));
 }

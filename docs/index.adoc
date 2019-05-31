@@ -1,7 +1,6 @@
-= OIL Documentation
 :toc: left
 :toclevels: 4
-:toc-title: OIL Documentation
+:toc-title:
 :sectanchors:
 :idprefix:
 :idseparator: -
@@ -12,9 +11,7 @@
 :docinfodir: src/meta
 :source-highlighter: highlightjs
 
-image::src/images/oillogo.png[]
-// horizontal line
-***
+include::src/docs/header.adoc[]
 
 include::src/docs/01-intro.adoc[]
 
@@ -26,6 +23,9 @@ include::src/docs/04-iab-europe-framework.adoc[]
 
 include::src/docs/05-oil-api.adoc[]
 
-include::src/docs/06-customisation.adoc[]
+include::src/docs/07-amp-consent.adoc[]
+include::src/docs/08-tealium.adoc[]
 
-include::src/docs/07-appendix.adoc[]
+include::src/docs/09-customisation.adoc[]
+
+include::src/docs/10-appendix.adoc[]

@@ -1,30 +1,33 @@
 import {
+  gdprApplies,
   getAdvancedSettingsPurposesDefault,
   getConfigValue,
   getCookieExpireInDays,
   getCustomPurposes,
   getDefaultToOptin,
+  getHubLocation,
+  getHubOrigin,
   getHubPath,
   getIabVendorBlacklist,
   getIabVendorWhitelist,
+  getLanguageFromLocale,
   getLocale,
   getLocaleUrl,
   getLocaleVariantName,
-  getLanguageFromLocale,
   getPoiGroupName,
+  getPoiListDirectory,
   getPublicPath,
-  setLocale,
-  gdprApplies,
+  getShowLimitedVendors,
   setGdprApplies,
-  getShowLimitedVendors
+  setLocale
 } from '../../../src/scripts/core/core_config';
 import { loadFixture } from '../../test-utils/utils_fixtures';
 import * as CoreLog from '../../../src/scripts/core/core_log';
 import { resetOil } from '../../test-utils/utils_reset';
+import { OilVersion } from '../../../src/scripts/core/core_utils';
 
 describe('core_config', () => {
 
-  const DEFAULT_FALLBACK_BACKEND_URL = 'https://oil-backend.herokuapp.com/oil/api/userViewLocales/enEN_01';
   const EXPECTED_PUBLIC_PATH = '//www/';
   const EXPECTED_PUBLIC_PATH_WITH_SLASH = '//www/i-forgot-the-trailing-slash/';
 
@@ -52,27 +55,6 @@ describe('core_config', () => {
 
   describe('parseServerUrls', function () {
 
-    const DEFAULT_FALLBACK_BACKEND_URL_WITH_LOCALE_STRING = 'https://oil-backend.herokuapp.com/oil/api/userViewLocales/foo';
-
-    it('should set __webpack_public_path__', function () {
-      loadFixture('config/given.config.with.publicPath.html');
-
-      expect(getPublicPath()).toEqual(EXPECTED_PUBLIC_PATH);
-      expect(__webpack_public_path__).toEqual(EXPECTED_PUBLIC_PATH);
-    });
-
-    it('Backwards compatibility: creates locale_url property if locale is string and locale_url empty', function () {
-      loadFixture('config/given.config.with.locale.string.html');
-      const result = getLocaleUrl();
-      expect(result).toEqual(DEFAULT_FALLBACK_BACKEND_URL_WITH_LOCALE_STRING);
-    });
-
-    it('Backwards compatibility: creates locale_url property if locale and locale_url empty', function () {
-      loadFixture('config/empty.config.html');
-      const result = getLocaleUrl();
-      expect(result).toEqual(DEFAULT_FALLBACK_BACKEND_URL);
-    });
-
     it('should warn about deprecated locale string', function () {
       loadFixture('config/given.config.with.locale.string.html');
 
@@ -83,7 +65,7 @@ describe('core_config', () => {
 
   });
 
-  describe('getLocaleVariantName', function() {
+  describe('getLocaleVariantName', function () {
 
     it('returns default enEN_01 when locale in config empty', function () {
       let result = getLocaleVariantName();
@@ -106,15 +88,23 @@ describe('core_config', () => {
       expect(getLocaleVariantName()).toEqual('floo');
     });
 
+    it('returns default enEN_01 when locale is defined without locale id', function () {
+      AS_OIL = {
+        CONFIG: {
+          locale: {}
+        }
+      };
+      expect(getLocaleVariantName()).toEqual('enEN_01');
+    });
   });
 
-  describe('getLanguageFromLocale', function() {
+  describe('getLanguageFromLocale', function () {
 
-    it('retrieves substring from parameter', function() {
+    it('retrieves substring from parameter', function () {
       expect(getLanguageFromLocale('foo_bar')).toEqual('fo');
     });
 
-    it('returns "en" when parameter is null', function(){
+    it('returns "en" when parameter is null', function () {
       expect(getLanguageFromLocale()).toEqual('en');
     })
 
@@ -136,7 +126,7 @@ describe('core_config', () => {
     const DEFAULT_DEFAULT_TO_OPTIN = false;
     const DEFAULT_POI_GROUP = 'default';
     const DEFAULT_CUSTOM_PURPOSES = [];
-    const DEFAULT_HUB_PATH = '/release/undefined/hub.html';
+    const DEFAULT_HUB_PATH = '/@ideasio/oil.js@1.2.3/release/current/hub.html';
 
     it('should call getConfigValue with their respective attribute', function () {
       loadFixture('config/full.config.html');
@@ -153,49 +143,50 @@ describe('core_config', () => {
     });
 
     it('should return correct default values', function () {
+      spyOn(OilVersion, 'getLatestReleaseVersion').and.returnValue('1.2.3');
       expect(getHubPath()).toEqual(DEFAULT_HUB_PATH);
       expect(getIabVendorWhitelist()).toBeFalsy();
       expect(getIabVendorBlacklist()).toBeFalsy();
       expect(getDefaultToOptin()).toEqual(DEFAULT_DEFAULT_TO_OPTIN);
       expect(getAdvancedSettingsPurposesDefault()).toEqual(DEFAULT_ADVANCED_SETTINGS_PURPOSES_DEFAULT);
       expect(getCustomPurposes()).toEqual(DEFAULT_CUSTOM_PURPOSES);
-      expect(getLocaleUrl()).toEqual(DEFAULT_FALLBACK_BACKEND_URL);
+      expect(getLocaleUrl()).toBeUndefined();
       expect(getCookieExpireInDays()).toEqual(DEFAULT_COOKIE_EXPIRES_IN);
       expect(getPoiGroupName()).toEqual(DEFAULT_POI_GROUP);
     });
 
   });
 
-  describe('getPublicPath', function() {
+  describe('getPublicPath', function () {
 
-    it('returns publicPath from configuration', function() {
+    it('returns publicPath from configuration', function () {
       loadFixture('config/given.config.with.publicPath.html');
       expect(getPublicPath()).toEqual(EXPECTED_PUBLIC_PATH);
     });
 
-    it('adds slash when missing to publicPath', function() {
+    it('adds slash when missing to publicPath', function () {
       loadFixture('config/given.config.with.publicPath.noslash.html');
       expect(getPublicPath()).toEqual(EXPECTED_PUBLIC_PATH_WITH_SLASH);
     });
 
-    it('returns undefined when no publicPath in config', function() {
+    it('returns undefined when no publicPath in config', function () {
       expect(getPublicPath()).toBeFalsy();
     });
 
   });
 
-  describe('gdprApplies', function() {
+  describe('gdprApplies', function () {
 
-    it('returns true when gdpr_applies_globally and gdpr_applies not in config', function() {
+    it('returns true when gdpr_applies_globally and gdpr_applies not in config', function () {
       expect(gdprApplies()).toBeTruthy();
     });
 
-    it('returns false when gdpr_applies_globally is false and setGdprApplies is not invoked with true', function() {
+    it('returns false when gdpr_applies_globally is false and setGdprApplies is not invoked with true', function () {
       loadFixture('config/given.config.with.gdpr.not.applies.html');
       expect(gdprApplies()).toBeFalsy();
     });
 
-    it('returns true when set after initialisation', function() {
+    it('returns true when set after initialisation', function () {
       loadFixture('config/given.config.with.gdpr.not.applies.html');
       setGdprApplies(true);
       expect(gdprApplies()).toBeTruthy();
@@ -203,9 +194,9 @@ describe('core_config', () => {
 
   });
 
-  describe('setGdprApplies', function() {
+  describe('setGdprApplies', function () {
 
-    it('sets gdprApplies in configuration', function() {
+    it('sets gdprApplies in configuration', function () {
       loadFixture('config/given.config.with.gdpr.not.applies.html');
       expect(gdprApplies()).toBeFalsy();
       setGdprApplies(true);
@@ -216,17 +207,63 @@ describe('core_config', () => {
 
   });
 
-  describe('getShowLimitedVendors', function() {
-    
-    it('returns false by default', function() {
+  describe('getShowLimitedVendors', function () {
+
+    it('returns false by default', function () {
       expect(getShowLimitedVendors()).toEqual(false);
     });
 
-    it('returns true when show_limited_vendors_only in configuration', function() {
+    it('returns true when show_limited_vendors_only in configuration', function () {
       loadFixture('config/given.config.with.advanced.settings.show.limited.vendors.html');
       expect(getShowLimitedVendors()).toBeTruthy();
     });
 
+  });
+
+  describe('getHubOrigin', () => {
+
+    it('returns complete configured hub origin', () => {
+      loadFixture('config/given.config.with.poiHubOrigin.and.poiHubPath.html');
+      expect(getHubOrigin()).toEqual('https://myServer.com');
+    });
+
+    it('returns complete configured hub origin if it is "/"', () => {
+      loadFixture('config/given.config.with.poiHubOrigin.being.slash.html');
+      expect(getHubOrigin()).toEqual('/');
+    });
+
+    it('returns configured hub origin with added protocol it missed', () => {
+      loadFixture('config/given.config.with.poiHubOrigin.without.protocol.html');
+      expect(getHubOrigin()).toEqual('http://myServer.com');
+    });
+
+  });
+
+  describe('getHubLocation', () => {
+
+    it('returns correct hub location depending on configured hub origin and hub path', () => {
+      loadFixture('config/given.config.with.poiHubOrigin.and.poiHubPath.html');
+      expect(getHubLocation()).toEqual('https://myServer.com/path/to/my/hub.html');
+    });
+
+  });
+
+  describe('getPoiListDirectory', () => {
+
+    it('returns correct poi list directory depending on configured hub origin ending with "/"', () => {
+      loadFixture('config/given.config.with.poiHubOrigin.ending.with.slash.html');
+      expect(getPoiListDirectory()).toEqual('https://myServer.com/poi-lists');
+    });
+
+    it('returns correct poi list directory depending on configured hub origin not ending with "/"', () => {
+      loadFixture('config/given.config.with.poiHubOrigin.and.poiHubPath.html');
+      expect(getPoiListDirectory()).toEqual('https://myServer.com/poi-lists');
+    });
+
+    it('returns correct poi list directory depending on configured hub origin being "/"', () => {
+      loadFixture('config/given.config.with.poiHubOrigin.being.slash.html');
+      expect(getPoiListDirectory()).toEqual('/poi-lists');
+    });
 
   });
 

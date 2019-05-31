@@ -1,12 +1,12 @@
-// TODO extract content of this function to another function for better testability!
 (function (window, document) {
   if (!window.__cmp) {
     window.__cmp = (function () {
 
-      function definePostMessageHandlerForIframes() {
-        let listen = window.attachEvent || window.addEventListener;
-        listen('message', function (event) {
-          window.__cmp.receiveMessage(event);
+      function definePostMessageHandlerForIframes(cmp) {
+        let listen = window.addEventListener || window.attachEvent;
+        let messageEvent = listen === 'attachEvent' ? 'onmessage' : 'message';
+        listen(messageEvent, function (event) {
+          cmp.receiveMessage(event);
         }, false);
       }
 
@@ -30,10 +30,10 @@
           if (configurationElement !== null && configurationElement.text) {
             try {
               let parsedConfig = JSON.parse(configurationElement.text);
-              if(parsedConfig && parsedConfig.hasOwnProperty('gdpr_applies_globally')) {
+              if (parsedConfig && parsedConfig.hasOwnProperty('gdpr_applies_globally')) {
                 gdprAppliesGlobally = parsedConfig.gdpr_applies_globally
               }
-            } catch(error) {
+            } catch (error) {
               // no complaints
             }
           }
@@ -68,25 +68,50 @@
 
       function defineMessageHandler() {
         return function (event) {
-          let data = event && event.data && event.data.__cmpCall;
+          let data = event && event.data;
+          let communicateWithStrings = (typeof data === 'string');
+          if (communicateWithStrings && data.indexOf('__cmpCall') !== -1) {
+            data = JSON.parse(data).__cmpCall;
+          } else {
+            data = data.__cmpCall;
+          }
           if (data) {
-            commandCollection.push({
-              callId: data.callId,
-              command: data.command,
-              parameter: data.parameter,
-              event: event
-            });
+            if (data.command === 'ping') {
+              handlePing((result, success) => {
+                let message = {
+                  __cmpReturn: {
+                    returnValue: result,
+                    success: success,
+                    callId: data.callId
+                  }
+                };
+                event.source.postMessage(communicateWithStrings ? JSON.stringify(message) : message, event.origin);
+              });
+            } else {
+              let commandEntry = {
+                callId: data.callId,
+                command: data.command,
+                parameter: data.parameter,
+                event: event
+              };
+              commandCollection.push(commandEntry);
+              if (isOilAlreadyLoaded()) {
+                window['AS_OIL']['commandCollectionExecutor'](commandEntry);
+              }
+            }
           }
         };
       }
 
-      definePostMessageHandlerForIframes();
       addCmpLocatorIframe();
 
       let commandCollection = [];
       let cmp = defineCmp();
       cmp.commandCollection = commandCollection;
       cmp.receiveMessage = defineMessageHandler();
+
+      definePostMessageHandlerForIframes(cmp);
+
       return cmp;
     }());
   }

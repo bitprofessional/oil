@@ -1,11 +1,11 @@
 /* this file is being used to serve the files from /dist folder. It is being used by heroku */
-
 const express = require('express');
 const serveStatic = require('serve-static');
 const compression = require('compression');
 const serveIndex = require('serve-index');
 const url = require('url');
 const morgan = require('morgan');
+const cors = require('cors');
 
 // import CORS config
 const headerConfig = require('./etc/headerConfig');
@@ -15,6 +15,14 @@ const port = process.argv[2] || process.env.PORT || 8080;
 
 let CACHE_DURATION = '10m';
 let DOCUMENT_ROOT = __dirname + '/dist';
+
+let redirectToOilJsOrg = function (req, res, next) {
+  if (req.path === '/') {
+    res.redirect(301, '//www.oiljs.org');
+  } else {
+    next();
+  }
+};
 
 let domainBlacklist = function (req, res, next) {
   let referer = req.header("Referer") || req.header("referer");
@@ -59,16 +67,22 @@ let additionalHeaders = function (req, res, next) {
 let app = express();
 // access log *this configuration must be defined before of the path configuration
 app.use(morgan('combined'));
+
+app.use(redirectToOilJsOrg);
 app.use(domainBlacklist);
 
 app.use(additionalHeaders);
 
+app.post("/amp-consent.json", function(req, res){
+  res.send('{"promptIfUnknown": true}');
+});
 // server gzip
 app.use(compression());
 
 // Serve directory indexes folder (with icons)
-app.use('/release', serveIndex('release', {'icons': true}));
-app.use('/demos', serveIndex('dist/demos', {'icons': true}));
+app.use('/release', cors(), serveIndex('release', {'icons': true}));
+app.use('/demos', cors(), serveIndex('dist/demos', {'icons': true}));
+app.use('/poi-lists', cors(), serveIndex('dist/poi-lists', {'icons': true}));
 
 // static with cache headers
 app.use(serveStatic(DOCUMENT_ROOT, {maxAge: CACHE_DURATION, cacheControl: true}));

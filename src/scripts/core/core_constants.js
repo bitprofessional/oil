@@ -5,12 +5,12 @@ export const OIL_SPEC = {
 };
 
 export const OIL_CONFIG = {
+  ATTR_CONFIG_VERSION: 'config_version',
   ATTR_ACTIVATE_POI: 'poi_activate_poi',
   ATTR_HUB_ORIGIN: 'poi_hub_origin',
   ATTR_HUB_PATH: 'poi_hub_path',
   ATTR_PUBLIC_PATH: 'publicPath',
   ATTR_HUB_LOCATION: 'poi_hub_location', // complete hub location, gets generated
-  ATTR_SUB_SET_COOKIE: 'poi_subscriber_set_cookie',
   ATTR_PREVIEW_MODE: 'preview_mode',
   ATTR_COOKIE_EXPIRES_IN_DAYS: 'cookie_expires_in_days',
   ATTR_TIMESTAMP: 'timestamp',
@@ -25,19 +25,23 @@ export const OIL_CONFIG = {
   ATTR_LOCALE_URL: 'locale_url',
   ATTR_IAB_VENDOR_LIST_URL: 'iabVendorListUrl',
   ATTR_CUSTOM_PURPOSES: 'customPurposes',
+  ATTR_CUSTOM_VENDOR_LIST_URL: 'customVendorListUrl',
   ATTR_IAB_VENDOR_BLACKLIST: 'iabVendorBlacklist',
   ATTR_IAB_VENDOR_WHITELIST: 'iabVendorWhitelist',
   ATTR_SHOW_LIMITED_VENDORS_ONLY: 'show_limited_vendors_only',
   ATTR_ADVANCED_SETTINGS_PURPOSES_DEFAULT: 'advanced_settings_purposes_default',
   ATTR_DEFAULT_TO_OPTIN: 'default_to_optin',
   ATTR_GDPR_APPLIES_GLOBALLY: 'gdpr_applies_globally',
-  ATTR_GDPR_APPLIES: 'gdpr_applies'
+  ATTR_GDPR_APPLIES: 'gdpr_applies',
+  ATTR_REQUIRE_OPTOUT_CONFIRM: 'require_optout_confirm'
 };
 
 export const OIL_CONFIG_CPC_TYPES = {
   CPC_TYPE_STANDARD: 'standard',
   CPC_TYPE_TABS: 'tabs'
 };
+
+export const OIL_CONFIG_DEFAULT_VERSION = 0;
 
 // Main Click events
 export const EVENT_NAME_OPT_IN = 'oil_optin_done';
@@ -73,12 +77,25 @@ export const OIL_PAYLOAD_VERSION = 'v';
 export const OIL_PAYLOAD_LOCALE_VARIANT_NAME = 'lvn';
 export const OIL_PAYLOAD_LOCALE_VARIANT_VERSION = 'lvv';
 export const OIL_PAYLOAD_CUSTOM_PURPOSES = 'cp';
+export const OIL_PAYLOAD_CUSTOM_VENDORLIST_VERSION = 'cvl';
+export const OIL_PAYLOAD_CONFIG_VERSION = 'cv';
 
 // Identify privacy page link, eg. for tracking
 export const DATAQA_PRIVACY_PAGE = 'oil-PrivacyPage';
 
+// Button labels
+export const JS_CLASS_BUTTON_OPTIN = 'as-js-optin';
+export const JS_CLASS_BUTTON_OILBACK = 'as-js-oilback';
+export const JS_CLASS_BUTTON_PROCEED = 'as-js-proceed';
+export const JS_CLASS_BUTTON_CANCEL = 'as-js-cancel';
+export const JS_CLASS_BUTTON_ADVANCED_SETTINGS = 'as-js-advanced-settings';
+
+export const CSS_CLASS_OPTOUT_DIALOG = 'as-oil-optout-confirm';
+
 // context attributes for action items, used for ga tracking
 export const DATA_CONTEXT_YES = 'YES';
+export const DATA_CONTEXT_CANCEL = 'CANCEL';
+export const DATA_CONTEXT_PROCEED = 'PROCEED';
 export const DATA_CONTEXT_ADVANCED_SETTINGS = 'ADVANCEDSETTINGS';
 export const DATA_CONTEXT_BACK = 'BACK';
 

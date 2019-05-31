@@ -25,32 +25,53 @@ module.exports = {
     chunksSortMode: 'dependency',
     inject: 'head'
   }, {
-    filename: 'demos/advanced-settings.html',
-    template: path.resolve(sourcePath, 'demos', 'advanced-settings.html'),
+    filename: 'demos/amp-consent.html',
+    template: path.resolve(sourcePath, 'demos', 'amp-consent.html'),
+    chunks: []
+  }, {
+    filename: 'demos/amp-consent-iframe.html',
+    template: path.resolve(sourcePath, 'demos', 'amp-consent-iframe.html'),
     chunks: ['oilstub', 'oil'],
-    chunksSortMode: 'dependency',
     inject: 'head'
-  },{
-    filename: 'demos/advanced-settings-tabs.html',
-    template: path.resolve(sourcePath, 'demos', 'advanced-settings-tabs.html'),
+  }, {
+    filename: 'demos/cpc-standard.html',
+    template: path.resolve(sourcePath, 'demos', 'cpc-standard.html'),
     chunks: ['oilstub', 'oil'],
     chunksSortMode: 'dependency',
     inject: 'head'
   }, {
-    filename: 'demos/advanced-settings-custom-purposes.html',
-    template: path.resolve(sourcePath, 'demos', 'advanced-settings-custom-purposes.html'),
+    filename: 'demos/cpc-tabs.html',
+    template: path.resolve(sourcePath, 'demos', 'cpc-tabs.html'),
     chunks: ['oilstub', 'oil'],
     chunksSortMode: 'dependency',
     inject: 'head'
   }, {
-    filename: 'demos/advanced-settings-limited-vendors.html',
-    template: path.resolve(sourcePath, 'demos', 'advanced-settings-limited-vendors.html'),
+    filename: 'demos/cpc-confirm-optout.html',
+    template: path.resolve(sourcePath, 'demos', 'cpc-confirm-optout.html'),
     chunks: ['oilstub', 'oil'],
     chunksSortMode: 'dependency',
     inject: 'head'
   }, {
-    filename: 'demos/advanced-settings-purposes-default.html',
-    template: path.resolve(sourcePath, 'demos', 'advanced-settings-purposes-default.html'),
+    filename: 'demos/cpc-custom-purposes.html',
+    template: path.resolve(sourcePath, 'demos', 'cpc-custom-purposes.html'),
+    chunks: ['oilstub', 'oil'],
+    chunksSortMode: 'dependency',
+    inject: 'head'
+  }, {
+    filename: 'demos/cpc-custom-vendors.html',
+    template: path.resolve(sourcePath, 'demos', 'cpc-custom-vendors.html'),
+    chunks: ['oilstub', 'oil'],
+    chunksSortMode: 'dependency',
+    inject: 'head'
+  }, {
+    filename: 'demos/cpc-limited-vendors.html',
+    template: path.resolve(sourcePath, 'demos', 'cpc-limited-vendors.html'),
+    chunks: ['oilstub', 'oil'],
+    chunksSortMode: 'dependency',
+    inject: 'head'
+  }, {
+    filename: 'demos/cpc-purposes-default.html',
+    template: path.resolve(sourcePath, 'demos', 'cpc-purposes-default.html'),
     chunks: ['oilstub', 'oil'],
     chunksSortMode: 'dependency',
     inject: 'head'
@@ -73,20 +94,26 @@ module.exports = {
     chunksSortMode: 'dependency',
     inject: 'head'
   }, {
-    filename: 'demos/advanced-settings-e2e-locale.html',
-    template: path.resolve(sourcePath, 'demos', 'advanced-settings-e2e-locale.html'),
+    filename: 'demos/cpc-e2e-locale.html',
+    template: path.resolve(sourcePath, 'demos', 'cpc-e2e-locale.html'),
     chunks: ['oilstub', 'oil'],
     chunksSortMode: 'dependency',
     inject: 'head'
   }, {
-    filename: 'demos/advanced-settings-poi.html',
-    template: path.resolve(sourcePath, 'demos', 'advanced-settings-poi.html'),
+    filename: 'demos/cpc-integrated-in-page.html',
+    template: path.resolve(sourcePath, 'demos', 'cpc-integrated-in-page.html'),
     chunks: ['oilstub', 'oil'],
     chunksSortMode: 'dependency',
     inject: 'head'
   }, {
-    filename: 'demos/advanced-settings-poi-integrated.html',
-    template: path.resolve(sourcePath, 'demos', 'advanced-settings-poi-integrated.html'),
+    filename: 'demos/cpc-poi.html',
+    template: path.resolve(sourcePath, 'demos', 'cpc-poi.html'),
+    chunks: ['oilstub', 'oil'],
+    chunksSortMode: 'dependency',
+    inject: 'head'
+  }, {
+    filename: 'demos/cpc-poi-integrated-in-page.html',
+    template: path.resolve(sourcePath, 'demos', 'cpc-poi-integrated-in-page.html'),
     chunks: ['oilstub', 'oil'],
     chunksSortMode: 'dependency',
     inject: 'head'
@@ -175,6 +202,18 @@ module.exports = {
     chunksSortMode: 'dependency',
     inject: 'head'
   }, {
+    filename: 'demos/poi-group-whitelist.html',
+    template: path.resolve(sourcePath, 'demos', 'poi-group-whitelist.html'),
+    chunks: ['oilstub', 'oil'],
+    chunksSortMode: 'dependency',
+    inject: 'head'
+  }, {
+    filename: 'demos/poi-group-blacklist.html',
+    template: path.resolve(sourcePath, 'demos', 'poi-group-blacklist.html'),
+    chunks: ['oilstub', 'oil'],
+    chunksSortMode: 'dependency',
+    inject: 'head'
+  }, {
     filename: 'demos/tealium-integration-test.html',
     template: path.resolve(sourcePath, 'demos', 'tealium-integration-test.html'),
     chunks: [],
@@ -193,17 +232,51 @@ module.exports = {
     chunksSortMode: 'dependency',
     inject: 'head'
   }, {
+    filename: 'demos/small-design-bi.html',
+    template: path.resolve(sourcePath, 'demos', 'small-design-bi.html'),
+    chunks: ['oilstub', 'oil'],
+    chunksSortMode: 'dependency',
+    inject: 'head'
+  }, {
+    filename: 'demos/small-design-pp.html',
+    template: path.resolve(sourcePath, 'demos', 'small-design-pp.html'),
+    chunks: ['oilstub', 'oil'],
+    chunksSortMode: 'dependency',
+    inject: 'head'
+  }, {
+    filename: 'demos/small-design-dm.html',
+    template: path.resolve(sourcePath, 'demos', 'small-design-dm.html'),
+    chunks: ['oilstub', 'oil'],
+    chunksSortMode: 'dependency',
+    inject: 'head'
+  }, {
     filename: 'demos/tag-management.html',
     template: path.resolve(sourcePath, 'demos', 'tag-management.html'),
     chunks: ['oilstub', 'oil'],
     chunksSortMode: 'dependency',
     inject: 'head'
   }, {
-    filename: 'sandbox/index.html',
-    template: path.resolve(sourcePath, 'sandbox', 'index.html'),
+    filename: 'demos/vendor-integration-with-iframe.html',
+    template: path.resolve(sourcePath, 'demos', 'vendor-integration-with-iframe.html'),
     chunks: ['oilstub', 'oil'],
     chunksSortMode: 'dependency',
     inject: 'head'
+  }, {
+    filename: 'demos/google-analytics-integration.html',
+    template: path.resolve(sourcePath, 'demos', 'google-analytics-integration.html'),
+    chunks: ['oilstub', 'oil'],
+    chunksSortMode: 'dependency',
+    inject: 'head'
+  }, {
+    filename: 'demos/custom-vendors-notification.html',
+    template: path.resolve(sourcePath, 'demos', 'custom-vendors-notification.html'),
+    chunks: ['oilstub', 'oil'],
+    chunksSortMode: 'dependency',
+    inject: 'head'
+  }, {
+    filename: 'demos/vendor-integration-iframe.html',
+    chunks: [],
+    template: path.resolve(sourcePath, 'demos', 'vendor-integration-iframe.html')
   }],
   entry: {
     'hub': path.resolve(sourcePath, 'hub.js'),
@@ -212,9 +285,6 @@ module.exports = {
     'oildevkit': path.resolve(sourcePath, 'scripts/dev-kit/dev-kit.js')
   },
   copy: [{
-    from: path.resolve(sourcePath, 'public'),
-    to: ''
-  }, {
     from: path.resolve(sourcePath, 'assets'),
     to: 'assets'
   }, {
@@ -229,9 +299,6 @@ module.exports = {
   }, {
     from: path.resolve(sourcePath, 'demos/empty.html'),
     to: 'demos/empty.html'
-  }, {
-    from: path.resolve(sourcePath, 'sandbox/assets'),
-    to: 'sandbox/assets'
   }],
   title: 'OIL',
   additionalWebpackOptions: false

@@ -1,4 +1,4 @@
-import { OIL_CONFIG } from './core_constants.js';
+import { OIL_CONFIG, OIL_CONFIG_DEFAULT_VERSION } from './core_constants';
 import { logError, logInfo } from './core_log.js';
 import { getGlobalOilObject, isObject, OilVersion, setGlobalOilObject } from './core_utils';
 
@@ -34,30 +34,51 @@ function getConfiguration() {
     setGlobalOilObject('CONFIG', readConfiguration(configurationElement));
     setGlobalOilObject('CONFIG_ATTRIBUTES', OIL_CONFIG);
 
-    parseServerUrls();
+    verifyConfiguration();
+    verifyLocaleObject();
+
+    if (getPublicPath()) {
+      __webpack_public_path__ = getPublicPath();
+    }
   }
   return getGlobalOilObject('CONFIG');
 }
 
 /**
- * 1) Extracts the locale from the config. The locale can be a string to use with the language backend
- * or it can be an object containing all labels
- *
- * 2) Sets the publicPath for async loading from Webpack
- * cf. https://webpack.js.org/guides/public-path/
- *
+ * Verify that configuration has a version.
  */
-function parseServerUrls() {
-  const localeValue = getLocale();
-
-  if ((!localeValue || (typeof localeValue) === 'string') && getLocaleUrl() === undefined) {
-    logError('Incorrect or missing locale parameter found. Please review documentation on how to set the locale object in your configuration.');
-    setLocaleUrl('https://oil-backend.herokuapp.com/oil/api/userViewLocales/' + getLocaleVariantName());
+function verifyConfiguration() {
+  if (!getConfigValue(OIL_CONFIG.ATTR_CONFIG_VERSION, undefined)) {
+    logError('Your configuration is faulty - it must contain a "config_version" property. See the oil.js documentation for details.');
   }
+}
 
-  if (getPublicPath()) {
-    __webpack_public_path__ = getPublicPath();
+/**
+ * Verify that locale object does not lack any required properties.
+ *
+ * The locale can be a
+ * a) string to use with the language backend or
+ * b) it can be an object containing all labels
+ *
+ * If both is missing a default will be used.
+ */
+function verifyLocaleObject() {
+  let locale = getLocale();
+
+  if ((!locale || (typeof locale) === 'string') && getLocaleUrl() === undefined) {
+    logError('Incorrect or missing locale parameter found. Please review documentation on how to set the locale object in your configuration. Using default locale.');
+  } else if (locale && isObject(locale)) {
+    if (!locale.localeId) {
+      logError('Your configuration is faulty - "locale" object misses "localeId" property. See the oil.js documentation for details.');
+    }
+    if (!locale.version) {
+      logError('Your configuration is faulty - "locale" object misses "version" property. See the oil.js documentation for details.');
+    }
   }
+}
+
+function setConfigValue(name, value) {
+  getConfiguration()[name] = value;
 }
 
 /**
@@ -72,31 +93,20 @@ export function getConfigValue(name, defaultValue) {
   return (config && typeof config[name] !== 'undefined') ? config[name] : defaultValue;
 }
 
-function setConfigValue(name, value) {
-  getConfiguration()[name] = value;
-}
-
 // **
 //  Public Interface
 // **
-/**
- * Checks if PreviewMode is activated.
- * @returns {*}
- */
+
+export function getConfigVersion() {
+  return getConfigValue(OIL_CONFIG.ATTR_CONFIG_VERSION, OIL_CONFIG_DEFAULT_VERSION);
+}
+
 export function isPreviewMode() {
   return getConfigValue(OIL_CONFIG.ATTR_PREVIEW_MODE, false);
 }
 
-/**
- * Checks if POI is activated.
- * @returns {*}
- */
 export function isPoiActive() {
   return getConfigValue(OIL_CONFIG.ATTR_ACTIVATE_POI, false);
-}
-
-export function isSubscriberSetCookieActive() {
-  return getConfigValue(OIL_CONFIG.ATTR_SUB_SET_COOKIE, true);
 }
 
 /**
@@ -104,24 +114,24 @@ export function isSubscriberSetCookieActive() {
  * @returns {string, null} domain iframe orgin
  */
 export function getHubOrigin() {
-  let origin = getConfigValue(OIL_CONFIG.ATTR_HUB_ORIGIN, '//oil.axelspringer.com');
+  let origin = getConfigValue(OIL_CONFIG.ATTR_HUB_ORIGIN, 'https://unpkg.com');
   if (origin) {
-    return origin.indexOf('http') !== -1 ? origin : location.protocol + origin;
+    return origin === '/' || origin.indexOf('http') !== -1 ? origin : location.protocol + origin;
   }
   return null;
 }
 
 export function getHubPath() {
-  return getConfigValue(OIL_CONFIG.ATTR_HUB_PATH, `/release/${OilVersion.getLatestReleaseVersion()}/hub.html`);
+  return getConfigValue(OIL_CONFIG.ATTR_HUB_PATH, `/@ideasio/oil.js@${OilVersion.getLatestReleaseVersion()}/release/current/hub.html`);
 }
 
 /**
  * The server path from which all chunks and ressources will be loaded.
- * @returns {string, '//oil.axelspringer.com'}
+ * @returns {string}
  */
 export function getPublicPath() {
   let publicPath = getConfigValue(OIL_CONFIG.ATTR_PUBLIC_PATH, undefined);
-  if(publicPath && publicPath.substr(-1) !== '/') {
+  if (publicPath && publicPath.substr(-1) !== '/') {
     publicPath += '/'
   }
   return publicPath;
@@ -129,10 +139,6 @@ export function getPublicPath() {
 
 export function getLocaleUrl() {
   return getConfigValue(OIL_CONFIG.ATTR_LOCALE_URL, undefined);
-}
-
-function setLocaleUrl(value) {
-  setConfigValue(OIL_CONFIG.ATTR_LOCALE_URL, value);
 }
 
 export function getIabVendorListUrl() {
@@ -143,8 +149,20 @@ export function getIabVendorBlacklist() {
   return getConfigValue(OIL_CONFIG.ATTR_IAB_VENDOR_BLACKLIST, undefined);
 }
 
+export function getCustomVendorListUrl() {
+  return getConfigValue(OIL_CONFIG.ATTR_CUSTOM_VENDOR_LIST_URL, undefined);
+}
+
 export function getIabVendorWhitelist() {
   return getConfigValue(OIL_CONFIG.ATTR_IAB_VENDOR_WHITELIST, undefined);
+}
+
+export function setIabVendorBlacklist(value) {
+  setConfigValue(OIL_CONFIG.ATTR_IAB_VENDOR_BLACKLIST, value);
+}
+
+export function setIabVendorWhitelist(value) {
+  setConfigValue(OIL_CONFIG.ATTR_IAB_VENDOR_WHITELIST, value);
 }
 
 export function getPoiGroupName() {
@@ -156,12 +174,14 @@ export function getCookieExpireInDays() {
 }
 
 export function getLocaleVariantName() {
+  const defaultLocaleId = 'enEN_01';
   let localeVariantName = getLocale();
+
   if (!localeVariantName) {
-    localeVariantName = 'enEN_01';
+    localeVariantName = defaultLocaleId;
   }
   if (localeVariantName && isObject(localeVariantName)) {
-    return localeVariantName.localeId;
+    return localeVariantName.localeId ? localeVariantName.localeId : defaultLocaleId;
   }
   return localeVariantName;
 }
@@ -179,10 +199,16 @@ export function getLanguageFromLocale(localeVariantName = 'en') {
  * @returns {string, null} complete iframe orgin
  */
 export function getHubLocation() {
-  if (getHubOrigin() && getHubPath()) {
-    return getHubOrigin() + getHubPath();
-  }
-  return null;
+  return getHubOrigin() + getHubPath();
+}
+
+export function getPoiListDirectory() {
+  let hubOrigin = getHubOrigin();
+  return endsWith(hubOrigin,'/') ? hubOrigin.replace(/\/$/, '/poi-lists') : hubOrigin + '/poi-lists';
+}
+
+function endsWith(str, suffix) {
+  return str.indexOf(suffix, str.length - suffix.length) !== -1;
 }
 
 /**

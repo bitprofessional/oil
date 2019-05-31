@@ -1,19 +1,18 @@
 
-![](/src/assets/images/landing_page/logo_github.png)
+![](https://raw.githubusercontent.com/as-ideas/oil/master/src/assets/images/landing_page/logo_github.png)
 
 # oil.js - Open Source Opt-In Layer
 
-oil.js is a lightweight consent manager and cookie banner. It is optimized for low latency and performance. It aims to be easy to customize, simple and user-friendly. It supports the IAB framework to forward the consent to ad providers.
+[oil.js](https://www.oiljs.org) is a lightweight consent manager and cookie banner. It is optimized for low latency and performance. It aims to be easy to customize, simple and user-friendly. It supports the IAB framework to forward the consent to ad providers.
 
 [![Latest Release](https://img.shields.io/github/release/as-ideas/oil.svg)](https://oil.axelspringer.com/release/) 
+[![npm version](https://img.shields.io/npm/v/@ideasio/oil.js.svg)](https://www.npmjs.com/package/@ideasio/oil.js)
 [![Build Status](https://travis-ci.org/as-ideas/oil.svg?branch=master)](https://travis-ci.org/as-ideas/oil)
 [![Coverage Status](https://coveralls.io/repos/github/as-ideas/oil/badge.svg?branch=master)](https://coveralls.io/github/as-ideas/oil?branch=master)
-![GZIP SIZE](http://img.badgesize.io/https://oil.axelspringer.com/latest/oil.min.js?compression=gzip&style=flat-square)
 [![GPL2 License][license-image]][license-url] 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fas-ideas%2Foil.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fas-ideas%2Foil?ref=badge_shield)
-[![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=L3gycEdHSG9Ea0JiT3RXbTBjSTl2RUpJUG9vOFh0M3F5dnFrU3pQNkxCUT0tLUw5aEhDalhOTng0R2N2cEh5a3Z5T1E9PQ==--802c6b824e7d37574af5556756b996c65129a2fa)](https://www.browserstack.com/automate/public-build/L3gycEdHSG9Ea0JiT3RXbTBjSTl2RUpJUG9vOFh0M3F5dnFrU3pQNkxCUT0tLUw5aEhDalhOTng0R2N2cEh5a3Z5T1E9PQ==--802c6b824e7d37574af5556756b996c65129a2fa)
-
-[Website](https://oil.axelspringer.com/) | [Full documentation](https://oil.axelspringer.com/docs/last-release) | [Sandbox](https://oil.axelspringer.com/sandbox/) | [Demo-Site with AppNexus](http://www.dieser-ferdinand.de/) | [HTML integration example](https://oil.axelspringer.com/demos/open-source-example.html) | [Release Notes](https://github.com/as-ideas/oil/releases)
+[![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=ZEZMK3M2RXZqUG05enhhME9vVWozbXdSM21XTVNpK1RCS251VkRMOEpudz0tLVQwaEpoaTRLeUxJSU1RaFlkM0ltTkE9PQ==--dc1fc353e7c2404d6cb9cd2887553718d9674f3a)](https://www.browserstack.com/automate/public-build/ZEZMK3M2RXZqUG05enhhME9vVWozbXdSM21XTVNpK1RCS251VkRMOEpudz0tLVQwaEpoaTRLeUxJSU1RaFlkM0ltTkE9PQ==--dc1fc353e7c2404d6cb9cd2887553718d9674f3a)
+[Website](https://www.oiljs.org/) | [Full documentation](https://oil.axelspringer.com/docs/last-release) | [Sandbox](https://oil.axelspringer.com/sandbox/) | [Demo-Site with AppNexus](http://www.dieser-ferdinand.de/) | [HTML integration example](https://oil.axelspringer.com/demos/open-source-example.html) | [Release Notes](https://github.com/as-ideas/oil/releases)
 
 ##### [current roadmap](ROADMAP.md)
 
@@ -21,19 +20,20 @@ oil.js is a lightweight consent manager and cookie banner. It is optimized for l
 
 The OIL project aims for a stable cross-company solution for the challenges the GDPR and new EU ePrivacy Regulation will pose to websites and publishers.
 
-![mobile-demo](/src/assets/images/readme/mobile-demo.gif)
+![mobile-demo](https://raw.githubusercontent.com/as-ideas/oil/master/src/assets/images/readme/mobile-demo.gif)
 
 * **Privacy by design & default**: Data privacy opt-in overlay for all users - it supports implicit and explicit modes of consent.
 * **Standardized**: Supports the [IAB specification](https://github.com/InteractiveAdvertisingBureau/GDPR-Transparency-and-Consent-Framework) which defines how a vendor should communicate with a Consent Management Provider (CMP, like oil.js) to gather consent information before running any data processing. That API is a set of JavaScript functions. You can find more at the official website http://advertisingconsent.eu/
 * **Cross-Domain** It not only supports domain opt-in (called "Site Opt-In", SOI), but also group-based cross-domain opt-in (called "Power Opt-In", POI) [More info here](#poi-and-soi)
 * **Lightweight & fast**: oil.js is less than 20 kB of JavaScript (minified + gzipped) and uses asynchronous loading so that your users won't notice any difference when using it
 * **Mobile-friendly and compatible with all modern browsers** Works on 99,9% of all devices and browsers, even IE9 and Android 4
+* **AMP Support**: Example integration for amp-consent integration included
 * **Easy to customize**: You can change the stylesheet, configure everything or access the functionality directly via Javascript as well
 * **User-friendly**: Supports advanced settings with a detailed cookie preference center (CPC)
 
-The Opt-In Layer (OIL) is an offical [Consent Management Provider (CMP)](http://advertisingconsent.eu/iab-europe-transparency-consent-framework-list-of-registered-cmps/) after the IAB Europe "Transparency & Consent Framework". Registered with ID 80.
+The Opt-In Layer (OIL) is an offical [Consent Management Provider (CMP)](http://advertisingconsent.eu/cmp-list/) after the IAB Europe "Transparency & Consent Framework". Registered with ID 80.
 
-![iab logo](/src/assets/images/landing_page/iab-logo.png)
+![iab logo](https://raw.githubusercontent.com/as-ideas/oil/master/src/assets/images/landing_page/iab-logo.png)
 
 ## Table of Contents
 
@@ -51,7 +51,7 @@ The Opt-In Layer (OIL) is an offical [Consent Management Provider (CMP)](http://
   
 ## Technical Quality Goals
 
-* OIL will be held compatible with the latest official browser releases, going back to the latest version as listed below and tested on broad range of browsers using Browserstack.com:
+* OIL will be held compatible with the latest official browser releases, going back to the latest version as listed below and tested on broad range of browsers using [BROWSERSTACK](http://browserstack.com/):
     * Chrome 14 - Latest
     * IE 9 - Latest
     * Firefox 9 - Latest
@@ -61,6 +61,7 @@ The Opt-In Layer (OIL) is an offical [Consent Management Provider (CMP)](http://
     * Android 4.4.4 - Latest
 * Continously integrated and delivered
 * Modular and maintainable solution
+* Powered by ![iab logo](https://raw.githubusercontent.com/as-ideas/oil/master/src/assets/images/Browserstack-logo@2x.png)
 
 ## Features
 
@@ -113,9 +114,9 @@ You need to add the CMP stub (a small script which stores all requests until the
 
 ```javascript
 <script>
-!function(e){var t={};function n(o){if(t[o])return t[o].exports;var r=t[o]={i:o,l:!1,exports:{}};return e[o].call(r.exports,r,r.exports,n),r.l=!0,r.exports}n.m=e,n.c=t,n.d=function(e,t,o){n.o(e,t)||Object.defineProperty(e,t,{configurable:!1,enumerable:!0,get:o})},n.r=function(e){Object.defineProperty(e,"__esModule",{value:!0})},n.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return n.d(t,"a",t),t},n.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},n.p="/",n(n.s=115)}({115:function(e,t,n){"use strict";!function(e,t){e.__cmp||(e.__cmp=function(){function n(){return!(!e.AS_OIL||!e.AS_OIL.commandCollectionExecutor)}(e.attachEvent||e.addEventListener)("message",function(t){e.__cmp.receiveMessage(t)},!1),function e(){if(!(t.getElementsByName("__cmpLocator").length>0))if(t.body){var n=t.createElement("iframe");n.style.display="none",n.name="__cmpLocator",t.body.appendChild(n)}else setTimeout(e,5)}();var o=[],r=function(r,a,c){if("ping"===r)!function(e){if(e){var o=!0,r=t.querySelector('script[type="application/configuration"]#oil-configuration');if(null!==r&&r.text)try{var a=JSON.parse(r.text);a&&a.hasOwnProperty("gdpr_applies_globally")&&(o=a.gdpr_applies_globally)}catch(e){}e({gdprAppliesGlobally:o,cmpLoaded:n()},!0)}}(c);else{var i={command:r,parameter:a,callback:c};o.push(i),n()&&e.AS_OIL.commandCollectionExecutor(i)}};return r.commandCollection=o,r.receiveMessage=function(e){var t=e&&e.data&&e.data.__cmpCall;t&&o.push({callId:t.callId,command:t.command,parameter:t.parameter,event:e})},r}())}(window,document)}});
+!function(e){var n={};function t(o){if(n[o])return n[o].exports;var r=n[o]={i:o,l:!1,exports:{}};return e[o].call(r.exports,r,r.exports,t),r.l=!0,r.exports}t.m=e,t.c=n,t.d=function(e,n,o){t.o(e,n)||Object.defineProperty(e,n,{configurable:!1,enumerable:!0,get:o})},t.r=function(e){Object.defineProperty(e,"__esModule",{value:!0})},t.n=function(e){var n=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(n,"a",n),n},t.o=function(e,n){return Object.prototype.hasOwnProperty.call(e,n)},t.p="/",t(t.s=115)}({115:function(e,n,t){"use strict";!function(e,n){e.__cmp||(e.__cmp=function(){function t(e){if(e){var t=!0,r=n.querySelector('script[type="application/configuration"]#oil-configuration');if(null!==r&&r.text)try{var a=JSON.parse(r.text);a&&a.hasOwnProperty("gdpr_applies_globally")&&(t=a.gdpr_applies_globally)}catch(e){}e({gdprAppliesGlobally:t,cmpLoaded:o()},!0)}}function o(){return!(!e.AS_OIL||!e.AS_OIL.commandCollectionExecutor)}var r=[],a=function(n,a,c){if("ping"===n)t(c);else{var i={command:n,parameter:a,callback:c};r.push(i),o()&&e.AS_OIL.commandCollectionExecutor(i)}};return a.commandCollection=r,a.receiveMessage=function(n){var a=n&&n.data&&n.data.__cmpCall;if(a)if("ping"===a.command)t(function(e,t){var o={__cmpReturn:{returnValue:e,success:t,callId:a.callId}};n.source.postMessage(o,n.origin)});else{var c={callId:a.callId,command:a.command,parameter:a.parameter,event:n};r.push(c),o()&&e.AS_OIL.commandCollectionExecutor(c)}},function(n){(e.attachEvent||e.addEventListener)("message",function(e){n.receiveMessage(e)},!1)}(a),function e(){if(!(n.getElementsByName("__cmpLocator").length>0))if(n.body){var t=n.createElement("iframe");t.style.display="none",t.name="__cmpLocator",n.body.appendChild(t)}else setTimeout(e,5)}(),a}())}(window,document)}});
 </script>
-<script type="text/javascript" src="https://oil.axelspringer.com/release/1.1.0/oil.1.1.0-RELEASE.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/@ideasio/oil.js/release/current/oil.<version>-RELEASE.min.js"></script>
 ```
 
 ## Configuration
@@ -147,28 +148,31 @@ For detailed explanations, please visit the [documentation](https://oil.axelspri
 
 | Config Parameter | Description | Default Setting |
 |----------|---------------|-------|
-| publicPath | The server path from which all chunks and ressources will be loaded. You should upload all released files there and configure it. | None, required
-| locale | Object including locale version, id and labels. You can define the standard labels for all legal texts and buttons and set a version for it. See [here for a configuration example](#texts-locale-object) and [here for all localizable labels](#available-text-labels) | None
-| locale_url | As an alternative to passing a locale object, set this to a JSON file with the locale configuration. See [here for an example file](https://github.com/as-ideas/oil/blob/master/test/fixtures/config/deDE_01_locale.json) | None
-| preview_mode | The preview mode is useful when testing OIL in a production or live environment. As a dev you can trigger the overlay by setting a cookie named "oil_preview" with the value "true". This will show the OIL layer on your client. | false
-| theme | The theme for the layer. By default there are two themes, 'dark' and 'light', with 'light' beeing the default. The theme currently works only as an additional css class. If you want to change the style or theme, please look into the styling guide in the development section. | 'light'
-| poi_activate_poi | Activates single consent cookie for multiple websites. [See requirements for POI here](#poi--power-opt-in) | false
-| poi_hub_origin | The origin of the hub.js installation | None
-| poi_hub_path | The path to the hub.html installation on the origin, if any. | /hub.html
-| poi_group_name | POI group name. POI only affects those sites with the same group name (mandatory if POI is activated). The group name must be valid (existing). <<supported-poi-groups,Supported POI groups.>> | none
-| poi_subscriber_set_cookie | Whether to set the SOI cookie on POI opt-ins or not. | true
+| advanced_settings | Replaces the No Button with an advanced settings button, displaying the Cookie Preference Center. The CPC enables the user to choose their own level of privacy. These settings are stored in the oil cookie (both SOI and POI) as well. | False
+| advanced_settings_purposes_default | All purposes in the advanced settings layer should be activated by default | false
+| config_version | Specifies the version of your OIL configuration. It will be stored with the consent cookie to track which explicit configuration version consent was granted for.| None
 | cookie_expires_in_days | Value in days until the domain cookie used to save the users decision in days | 31
-| [[config-timeout]]timeout | Value in seconds until the opt-in layer will be automatically hidden. 0 or lower deactivates auto-hide. | 60
-| advanced_settings | Replaces the No Button with a advanced settings button, which enables the user to select between different settings of privacy. The results of this selection is stored in the oil cookie (both SOI and POI) as well. | False
-| persist_min_tracking | If minimum tracking should result in removing all OIL cookies from the users browser and close the layer and store this selection in the oil cookie. | True
+| cpc_type | Specifies the type (the layout) of the Cookie Preference Center. Currently, two types are supported: 'standard' and 'tabs'. Depending on this parameter additional label configuration may be necessary. See section <<Full Label Configuration>> for details. | standard
+| customPurposes | Array of custom purposes defined by publisher. IDs for custom purposes may range from 25-88. | None
+| customVendorListUrl | Custom vendor list ('non IAB vendors') to use, will be loaded at the same time as the iabVendorList. | None
+| default_to_optin | Signal opt-in to vendors while still displaying the Opt-In layer to the end user | false
+| gdpr_applies_globally | Flag to indicate that publisher is from the EU, thus showing the OIL layer to every user. The flag is passed to vendors. | true
+| iabVendorBlacklist | Array of vendor IDs to exclude. | None
 | iabVendorListUrl | URL of the list of vendors to use | https://vendorlist.consensu.org/vendorlist.json
 | iabVendorWhitelist | Array of vendor IDs to allow. If it is set, values in `iabVendorBlacklist` are ignored. | None
-| iabVendorBlacklist | Array of vendor IDs to exclude. | None
+| locale | Object including locale version, id and labels. You can define the standard labels for all legal texts and buttons and set a version for it. See [here for a configuration example](#texts-locale-object) and [here for all localizable labels](#available-text-labels) | None
+| locale_url | As an alternative to passing a locale object, set this to a JSON file with the locale configuration. See [here for an example file](https://github.com/as-ideas/oil/blob/master/test/fixtures/config/deDE_01_locale.json) | None
+| persist_min_tracking | If minimum tracking should result in removing all OIL cookies from the users browser and close the layer and store this selection in the oil cookie. | True
+| poi_activate_poi | Activates single consent cookie for multiple websites. [See requirements for POI here](#poi--power-opt-in) | false
+| poi_group_name | POI group name. POI only affects those sites with the same group name (mandatory if POI is activated). The group name must be valid (existing). | None
+| poi_hub_origin | The origin of the hub.js installation | `https://unpkg.com`
+| poi_hub_path | The path to the hub.html installation on the origin, if any. | `/@ideasio/oil.js@{oilVersion}/release/current/hub.html`
+| preview_mode | The preview mode is useful when testing OIL in a production or live environment. When value is `true`, the layer remains hidden until you manually trigger `window.AS_OIL.previewModeOn()` in your console. Reload, and the layer is displayed. You can hide it again with `window.AS_OIL.previewModeOff()`. | false
+| publicPath | The server path from which all chunks and ressources will be loaded. You should upload all released files there and configure it. | `//unpkg.com/@ideasio/oil.js@{oilVersion}/release/current/`
+| require_optout_confirm | Flag to activate the opt-out confirmation dialog within the CPC. If set to `true`, additional label definitions (with prefix `label_cpc_purpose_optout`) are required. See the label configuration section in the documentation for details. | false
 | show_limited_vendors_only | Flag to only show the vendors limited by `iabVendorWhitelist` or `iabVendorBlacklist` in the CPC | false
-| customPurposes | Array of custom purposes defined by publisher. IDs for custom purposes may range from 25-88. | None
-| default_to_optin | Signal opt-in to vendors while still displaying the Opt-In layer to the end user | false
-| advanced_settings_purposes_default | All purposes in the advanced settings layer should be activated by default | false
-| gdpr_applies_globally | Flag to indicate that publisher is from the EU, thus showing the OIL layer to every user. The flag is passed to vendors. | true
+| theme | The theme for the layer. By default there are two themes, 'dark' and 'light', with 'light' beeing the default. The theme currently works only as an additional css class. If you want to change the style or theme, please look into the styling guide in the development section. | 'light'
+| timeout | Value in seconds until the opt-in layer will be automatically hidden. 0 or lower deactivates auto-hide. | 60
 
 ### Texts & Locale Object
 
@@ -315,15 +319,15 @@ The is a detailed section about styling in the documentation. You can edit the d
 #### Desktop
 
 <p align="center">
-  <img width="400" src="/src/assets/images/readme/example-1.png">
-  <img width="400" src="/src/assets/images/readme/example-2.png">
+  <img width="400" src="https://raw.githubusercontent.com/as-ideas/oil/master/src/assets/images/readme/example-1.png">
+  <img width="400" src="https://raw.githubusercontent.com/as-ideas/oil/master/src/assets/images/readme/example-2.png">
 </p>
 
 #### Mobile
 
 <p align="center">
-  <img width="290" src="/src/assets/images/readme/example-mobile-1.png">
-  <img width="290" src="/src/assets/images/readme/example-mobile-2.png">
+  <img width="290" src="https://raw.githubusercontent.com/as-ideas/oil/master/src/assets/images/readme/example-mobile-1.png">
+  <img width="290" src="https://raw.githubusercontent.com/as-ideas/oil/master/src/assets/images/readme/example-mobile-2.png">
 </p>
 
 ## Changelog

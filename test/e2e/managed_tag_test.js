@@ -11,15 +11,14 @@ module.exports = {
 
   beforeEach: browser => {
     browser
-      .url(browser.globals.launch_url_host1 + 'demos/tag-management.html')
       .deleteCookies();
 
     browser
       .url(browser.globals.launch_url_host1 + 'demos/tag-management.html')
       .useCss()
-      .waitForElementVisible('body', 1000, false)
+      .waitForElementPresent('body', 1000, false)
       .useXpath()
-      .waitForElementVisible(OIL_LAYER, 2000, false);
+      .waitForElementPresent(OIL_LAYER, 2000, false);
   },
 
   'Managed tags are NOT visible if consent was NOT given (yet)': function (browser) {

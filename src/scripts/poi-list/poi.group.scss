@@ -5,16 +5,12 @@
  */
 .as-oil-poi-group-list-wrapper {
   @include media('<=phone') {
-    position: relative;
-    width: initial;
     min-height: 300px;
     z-index: 100;
-    margin: 50vh 5px 50px;
     padding: 16px 12px;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
     background-color: #fafafa;
-    -webkit-box-shadow: 0 -8px 20px 0 rgba(0, 0, 0, .2);
     box-shadow: 0 -8px 20px 0 rgba(0, 0, 0, .2);
 
     .as-oil__heading, .as-oil__intro-txt {
@@ -23,11 +19,9 @@
   }
 
   .as-oil-poi-group-list {
-    @include media('>phone') {
-      overflow: auto;
-      overflow-y: scroll;
-      max-height: 200px;
-    }
+    overflow: auto;
+    overflow-y: scroll;
+    max-height: 200px;
   }
 
   .as-oil-l-buttons-light {
@@ -36,11 +30,8 @@
     }
 
     @include media('<=phone') {
-      display: initial;
       background: $background-color-light;
-      box-shadow: 0 -8px 20px 0 rgba(0, 0, 0, .2);
       padding: 8px;
-      position: fixed;
       bottom: 0;
       left: 0;
     }
@@ -52,11 +43,8 @@
     }
 
     @include media('<=phone') {
-      display: initial;
       background: $background-color-dark;
-      box-shadow: 0 -8px 20px 0 rgba(0, 0, 0, .2);
       padding: 8px;
-      position: fixed;
       bottom: 0;
       left: 0;
     }
@@ -77,7 +65,9 @@
     font-weight: bold;
     cursor: pointer;
   }
-
+  .as-oil-third-party-description, .as-oil-third-party-purpose {
+    font-size: 12px;
+  }
   .as-oil-third-party-link {
     color: $background-color-dark;
     font-size: 12px;

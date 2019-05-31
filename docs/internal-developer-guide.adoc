@@ -23,7 +23,7 @@ Jira: https://id-jira.axelspringer.de/browse/OIL
 
 Jenkins: https://kube-jenkins.ipool.asideas.de/view/OIL%20Project/
 
-Overview: http://oil.axelspringer.com
+Overview: https://www.oiljs.org
 
 
 === Hub Deployment
@@ -39,8 +39,6 @@ include::../etc/headerConfig.js[tags=p3p-config]
 include::src/docs/development/tealium-deployment.adoc[]
 
 include::src/docs/development/locale-configuration.adoc[]
-
-include::src/docs/development/unofficial-configuration.adoc[]
 
 === FYI: Cross-Origin Messaging
 

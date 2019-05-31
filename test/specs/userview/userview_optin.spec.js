@@ -5,8 +5,8 @@ import * as CoreUtils from '../../../src/scripts/core/core_utils';
 import * as CorePoi from '../../../src/scripts/core/core_poi';
 import * as UserViewPoi from '../../../src/scripts/userview/userview_poi';
 import {
-  EVENT_NAME_OPT_IN,
-  OIL_PAYLOAD_CUSTOM_PURPOSES,
+  EVENT_NAME_OPT_IN, OIL_PAYLOAD_CONFIG_VERSION,
+  OIL_PAYLOAD_CUSTOM_PURPOSES, OIL_PAYLOAD_CUSTOM_VENDORLIST_VERSION,
   OIL_PAYLOAD_LOCALE_VARIANT_NAME,
   OIL_PAYLOAD_LOCALE_VARIANT_VERSION,
   OIL_PAYLOAD_PRIVACY,
@@ -17,12 +17,16 @@ import { setupVendorListSpies } from '../../test-utils/utils_vendorlist';
 
 describe('user view opt-in handler', () => {
 
+  const CONFIG_VERSION = 17;
+
   const EXPECTED_COOKIE = {
     opt_in: true,
     version: '1.0.0',
     localeVariantName: 'enEN_01',
     localeVariantVersion: 17,
     customPurposes: [25],
+    customVendorListVersion: 135,
+    configVersion: CONFIG_VERSION,
     consentString: 'BOOqZJ1OOqZJ1BQABBENARAAAAABgACACA'
   };
 
@@ -48,23 +52,8 @@ describe('user view opt-in handler', () => {
     });
 
     it('should set single opt-in too if it is not prohibited', (done) => {
-      oilPowerOptIn(PRIVACY_SETTINGS, false).then(() => {
+      oilPowerOptIn(PRIVACY_SETTINGS).then(() => {
         expect(CoreCookies.setSoiCookie).toHaveBeenCalledWith(PRIVACY_SETTINGS);
-        done();
-      });
-    });
-
-    it('should not set single opt-in too if it is prohibited', (done) => {
-      spyOn(CoreConfig, 'isPoiActive').and.returnValue(true);
-
-      oilPowerOptIn(PRIVACY_SETTINGS, true).then(() => {
-        expect(CoreCookies.setSoiCookie).not.toHaveBeenCalled();
-        expect(CoreCookies.buildSoiCookie).toHaveBeenCalledWith(PRIVACY_SETTINGS);
-
-        let payload = UserViewPoi.activatePowerOptInWithIFrame.calls.argsFor(0)[0];
-        verifyThatPayloadForPowerOptInActivationIsCorrect(payload, EXPECTED_COOKIE);
-
-        expect(CoreUtils.sendEventToHostSite).toHaveBeenCalledWith(EVENT_NAME_OPT_IN);
         done();
       });
     });
@@ -125,6 +114,8 @@ describe('user view opt-in handler', () => {
       expect(payload[OIL_PAYLOAD_LOCALE_VARIANT_NAME]).toEqual(expectations.localeVariantName);
       expect(payload[OIL_PAYLOAD_LOCALE_VARIANT_VERSION]).toEqual(expectations.localeVariantVersion);
       expect(payload[OIL_PAYLOAD_CUSTOM_PURPOSES]).toEqual(expectations.customPurposes);
+      expect(payload[OIL_PAYLOAD_CUSTOM_VENDORLIST_VERSION]).toEqual(expectations.customVendorListVersion);
+      expect(payload[OIL_PAYLOAD_CONFIG_VERSION]).toEqual(expectations.configVersion);
     }
 
   });

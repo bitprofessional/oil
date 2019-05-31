@@ -4,13 +4,12 @@ module.exports = {
   '@disabled': false,
   beforeEach: browser => {
     browser
-      .url(browser.globals.launch_url_host1 + 'demos/direct-integration-preview-mode.html')
       .deleteCookies();
 
     browser
       .url(browser.globals.launch_url_host1 + 'demos/direct-integration-preview-mode.html')
       .useCss()
-      .waitForElementVisible('body', 1000, false)
+      .waitForElementPresent('body', 1000, false)
       .useXpath()
   },
 
