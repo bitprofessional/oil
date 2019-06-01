@@ -1,5 +1,5 @@
 export const OIL_SPEC = {
-  CMP_ID: 80,
+  CMP_ID: 82,
   CMP_VERSION: 1,
   LATEST_CONSENT_STRING_VERSION: 1
 };
