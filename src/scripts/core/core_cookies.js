@@ -3,7 +3,7 @@ import { logInfo } from './core_log';
 import { getConfigVersion, getCookieExpireInDays, getCustomPurposes, getDefaultToOptin, getLanguage, getLanguageFromLocale, getLocaleVariantName } from './core_config';
 import { getLocaleVariantVersion } from './core_utils';
 import { OIL_CONFIG_DEFAULT_VERSION, OIL_SPEC } from './core_constants';
-import { getCustomVendorListVersion, getLimitedVendorIds, getPurposes, getVendorList, loadVendorListAndCustomVendorList } from './core_vendor_lists';
+import { getCustomVendorListVersion, getLimitedVendorIds, getLimitedCustomVendorIds, getPurposes, getVendorList, getCustomVendorList, loadVendorListAndCustomVendorList } from './core_vendor_lists';
 import { OilVersion } from './core_utils';
 
 const {ConsentString} = require('consent-string');
@@ -46,6 +46,8 @@ export function findCookieConsideringCookieVersions(cookieConfig, outdatedCookie
     cookie = outdatedCookieTransformer(cookieConfig);
   } else {
     cookie = cookieConfig.defaultCookieContent;
+    cookie.customVendors = getCustomVendorList();
+    cookie.allowedCustomVendors = [];
   }
   return cookie;
 }
@@ -106,7 +108,9 @@ export function buildSoiCookie(privacySettings) {
         customVendorListVersion: getCustomVendorListVersion(),
         customPurposes: getCustomPurposesWithConsent(privacySettings),
         consentString: consentData.getConsentString(),
-        configVersion: cookieConfig.defaultCookieContent.configVersion
+        configVersion: cookieConfig.defaultCookieContent.configVersion,
+        customVendors: getCustomVendorList(),
+        allowedCustomVendors: getLimitedCustomVendorIds()
       });
     }).catch(error => reject(error));
   });

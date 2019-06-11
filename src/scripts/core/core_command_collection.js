@@ -1,11 +1,15 @@
 import { logError, logInfo } from './core_log';
 import { getCommandCollection } from './core_utils';
-import { getConsentDataString, getVendorConsentData, getPublisherConsentData } from './core_consents';
+import { getConsentDataString, getVendorConsentData, getCustomVendorConsentData, getPublisherConsentData } from './core_consents';
 import { getVendorList, loadVendorListAndCustomVendorList } from './core_vendor_lists';
 
 const commands = {
   getVendorConsents: (vendorIds) => {
     return getVendorConsentData(vendorIds);
+  },
+
+  getCustomVendorConsents: (customVendorIds) => {
+    return getCustomVendorConsentData(customVendorIds);
   },
 
   getConsentData: (consentStringVersion) => {

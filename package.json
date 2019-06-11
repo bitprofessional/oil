@@ -1,6 +1,6 @@
 {
   "name": "oil",
-  "version": "1.3.0-1-atf",
+  "version": "1.3.0-2-atf",
   "description": "oil.js Opt-In Layer for consent management based on the IAB TCF Standard",
   "keywords": [
     "IAB Europe",

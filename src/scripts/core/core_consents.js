@@ -1,6 +1,6 @@
 import {getSoiCookie} from './core_cookies';
 import {getCustomPurposeIds, gdprApplies} from './core_config';
-import {getLimitedVendorIds, getPurposeIds} from './core_vendor_lists';
+import {getLimitedVendorIds, getPurposeIds, getLimitedCustomVendorIds} from './core_vendor_lists';
 import {OIL_SPEC} from './core_constants';
 
 export function getVendorConsentData(vendorIds) {
@@ -13,6 +13,20 @@ export function getVendorConsentData(vendorIds) {
       hasGlobalScope: false,
       purposeConsents: buildPurposeConsents(cookie.consentData.getPurposesAllowed(), getPurposeIds()),
       vendorConsents: buildVendorConsents(cookie, vendorIds)
+    };
+  }
+}
+
+export function getCustomVendorConsentData(customVendorIds) {
+  let cookie = getSoiCookie();
+
+  if (cookie && cookie.consentData) {
+    return {
+      metadata: cookie.consentData.getMetadataString(),
+      gdprApplies: gdprApplies(),
+      hasGlobalScope: false,
+      purposeConsents: buildPurposeConsents(cookie.consentData.getPurposesAllowed(), getPurposeIds()),
+      vendorConsents: buildCustomVendorConsents(cookie, customVendorIds)
     };
   }
 }
@@ -65,6 +79,17 @@ function buildVendorConsents(cookie, requestedVendorIds) {
   return vendorIds
     .reduce((map, vendorId) => {
       map[vendorId] = allowedVendors.indexOf(vendorId) !== -1;
+      return map
+    }, {});
+}
+
+function buildCustomVendorConsents(cookie, requestedCustomVendorIds) {
+  let customVendorIds = (requestedCustomVendorIds && requestedCustomVendorIds.length) ? requestedCustomVendorIds : getLimitedCustomVendorIds();
+  let allowedVendors = cookie.allowedCustomVendors;
+
+  return customVendorIds
+    .reduce((map, customVendorId) => {
+      map[customVendorId] = allowedVendors.indexOf(customVendorId) !== -1;
       return map
     }, {});
 }

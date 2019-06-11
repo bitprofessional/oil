@@ -52,7 +52,7 @@ export function loadVendorListAndCustomVendorList() {
 
 }
 
-function loadCustomVendorList() {
+export function loadCustomVendorList() {
   return new Promise(resolve => {
     let customVendorListUrl = getCustomVendorListUrl();
     if (!customVendorListUrl) {
@@ -85,8 +85,16 @@ export function getVendors() {
   return cachedVendorList ? cachedVendorList.vendors : expandIdsToObjects(buildDefaultVendorIdList());
 }
 
+export function getCustomVendors() {
+  return cachedCustomVendorList ? cachedCustomVendorList.vendors : false;
+}
+
 export function getVendorIds() {
   return getVendors().map(({ id }) => id);
+}
+
+export function getCustomVendorIds() {
+  return getCustomVendors().map(({id}) => id);
 }
 
 export function getVendorList() {
@@ -149,6 +157,18 @@ export function getLimitedVendorIds() {
     limited = limited.filter(vendorId => whitelist.indexOf(vendorId) > -1);
   } else if (blacklist && blacklist.length > 0) {
     limited = limited.filter(vendorId => blacklist.indexOf(vendorId) === -1);
+  }
+
+  return limited;
+}
+
+export function getLimitedCustomVendorIds() {
+  let limited;
+
+  if (!cachedCustomVendorList) {
+    limited = false;
+  } else {
+    limited = getCustomVendorIds();
   }
 
   return limited;
