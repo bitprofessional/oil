@@ -86,7 +86,7 @@ function buildVendorConsents(cookie, requestedVendorIds) {
 function buildCustomVendorConsents(cookie, requestedCustomVendorIds) {
   let customVendorIds = (requestedCustomVendorIds && requestedCustomVendorIds.length) ? requestedCustomVendorIds : getLimitedCustomVendorIds();
   let allowedVendors = cookie.allowedCustomVendors;
-
+console.log(customVendorIds);
   return customVendorIds
     .reduce((map, customVendorId) => {
       map[customVendorId] = allowedVendors.indexOf(customVendorId) !== -1;
