@@ -19,7 +19,13 @@ export function getVendorConsentData(vendorIds) {
 
 export function getCustomVendorConsentData(customVendorIds) {
   let cookie = getSoiCookie();
-console.log(customVendorIds);
+
+  if (customVendorIds !== null) {
+    for (let vend = 0; vend < customVendorIds.length; vend++) {
+      customVendorIds[vend] = customVendorIds[vend].toString();
+    }
+  }
+
   if (cookie && cookie.consentData) {
     return {
       metadata: cookie.consentData.getMetadataString(),
