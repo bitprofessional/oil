@@ -97,9 +97,14 @@ export function buildSoiCookie(privacySettings) {
     loadVendorListAndCustomVendorList().then(() => {
       let cookieConfig = getOilCookieConfig();
       let consentData = cookieConfig.defaultCookieContent.consentData;
+      let limitedVendorIds = getLimitedVendorIds();
+
       consentData.setGlobalVendorList(getVendorList());
       consentData.setPurposesAllowed(getStandardPurposesWithConsent(privacySettings));
-      consentData.setVendorsAllowed(getLimitedVendorIds());
+
+      limitedVendorIds = limitedVendorIds.filter(id => consentData.allowedPurposeIds.indexOf(id) > -1);
+
+      consentData.setVendorsAllowed(limitedVendorIds);
       resolve({
         opt_in: true,
         version: cookieConfig.defaultCookieContent.version,
