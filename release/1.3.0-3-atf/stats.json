@@ -21,8 +21,8 @@
     },
     {
         "name": "dist/hub.1.3.0-3-atf-RELEASE.min.js",
-        "size": 65079,
-        "sizeGz": 20633
+        "size": 65219,
+        "sizeGz": 20684
     },
     {
         "name": "dist/hub.html",
@@ -31,8 +31,8 @@
     },
     {
         "name": "dist/oil.1.3.0-3-atf-RELEASE.min.js",
-        "size": 76132,
-        "sizeGz": 23698
+        "size": 76272,
+        "sizeGz": 23751
     },
     {
         "name": "dist/oildevkit.1.3.0-3-atf-RELEASE.min.js",
