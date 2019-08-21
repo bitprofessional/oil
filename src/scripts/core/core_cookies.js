@@ -102,7 +102,18 @@ export function buildSoiCookie(privacySettings) {
       consentData.setGlobalVendorList(getVendorList());
       consentData.setPurposesAllowed(getStandardPurposesWithConsent(privacySettings));
 
-      limitedVendorIds = limitedVendorIds.filter(id => consentData.allowedPurposeIds.indexOf(id) > -1);
+      limitedVendorIds = limitedVendorIds.filter(vendorId => {
+        let vendor = consentData.vendorList.vendors.find(vendorObject => vendorObject.id === vendorId);
+        let returnValue = false;
+
+        if (consentData.allowedPurposeIds.length <= 0) {
+          return returnValue;
+        }
+
+        returnValue = consentData.allowedPurposeIds.some(purposeId => vendor.purposeIds.indexOf(purposeId) >= 0);
+
+        return returnValue;
+      });
 
       consentData.setVendorsAllowed(limitedVendorIds);
       resolve({
