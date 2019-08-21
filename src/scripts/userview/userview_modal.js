@@ -214,10 +214,17 @@ function oilShowThirdPartyList() {
  * @return object DOM element
  */
 function defineOilWrapper() {
-  let oilWrapper = document.createElement('div');
-  // Set some attributes as CSS classes and attributes for testing
-  oilWrapper.setAttribute('class', `as-oil ${ getTheme() }`);
-  oilWrapper.setAttribute('data-qa', 'oil-Layer');
+  let oilWrapper;
+
+  if (document.querySelector('.as-oil') !== null) {
+    oilWrapper = document.querySelector('.as-oil');
+  } else {
+    oilWrapper = document.createElement('div');
+    // Set some attributes as CSS classes and attributes for testing
+    oilWrapper.setAttribute('class', `as-oil ${ getTheme() }`);
+    oilWrapper.setAttribute('data-qa', 'oil-Layer');
+  }
+
   return oilWrapper;
 }
 
