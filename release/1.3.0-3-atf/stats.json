@@ -1,8 +1,8 @@
 [
     {
         "name": "dist/0.1.3.0-3-atf-RELEASE.chunk.js",
-        "size": 50395,
-        "sizeGz": 11734
+        "size": 51309,
+        "sizeGz": 11960
     },
     {
         "name": "dist/1.1.3.0-3-atf-RELEASE.chunk.js",
@@ -11,7 +11,7 @@
     },
     {
         "name": "dist/2.1.3.0-3-atf-RELEASE.chunk.js",
-        "size": 7781,
+        "size": 7780,
         "sizeGz": 2556
     },
     {
