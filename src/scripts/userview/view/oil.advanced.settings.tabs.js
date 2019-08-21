@@ -51,18 +51,18 @@ const ContentSnippet = () => {
       ${buildPurposeEntries(getPurposes().concat(getCustomPurposes()))}
       <div class="as-oil-margin-top">
         <div class="as-oil-tabs-cpc__third-parties-link" id="as-js-third-parties-link"><span>i</span>${getLabel(OIL_LABELS.ATTR_LABEL_THIRD_PARTY)}</a></div>
-        
+
         <div id="as-js-third-parties-list" class="as-oil-tabs-cpc__third-parties-list" style="display: none;">
            ${buildVendorEntries()}
-           
+
           ${IsCustomVendorsEnables() ? `
           <div id="as-oil-custom-third-parties-list">
             ${buildCustomVendorEntries()}
           </div>
            ` : ''}
         </div>
-        
-   
+
+
       </div>
     </div>
     <hr>
@@ -147,7 +147,7 @@ const buildVendorEntries = () => {
   if (vendorList && !vendorList.isDefault) {
     let listWrapped = getVendorsToDisplay().map((element) => {
       if (element.name) {
-        return buildVendorEntry(element);
+        return buildVendorEntry(element, vendorList);
       }
     });
     return `<div class="as-oil-poi-group-list">${listWrapped.join('')}</div>`;
@@ -162,7 +162,7 @@ const buildCustomVendorEntries = () => {
   if (vendorList && !vendorList.isDefault && vendorList.vendors) {
     let listWrapped = vendorList.vendors.map((element) => {
       if (element.name) {
-        return buildVendorEntry(element);
+        return buildVendorEntry(element, vendorList);
       }
     });
     return `<div class="as-oil-poi-group-list">${listWrapped.join('')}</div>`;
@@ -175,7 +175,53 @@ const IsCustomVendorsEnables = () => {
   return !!getCustomVendorListUrl();
 };
 
-const buildVendorEntry = (vendor) => {
+const buildVendorEntry = (vendor, vendorList) => {
+  let featuresString = '';
+  let purposesString = '';
+  let legIntPurposesString = '';
+
+  if (vendor.featureIds.length > 0) {
+    featuresString = '<div class="as-oil-third-party-link">Features: ';
+
+    vendor.featureIds.forEach(featureId => {
+      let vendorListFeatures = typeof vendorList.features === 'undefined' ? getVendorList().features : vendorList.features;
+      let feature = vendorListFeatures.find(featureObject => featureObject.id === featureId);
+
+      featuresString += typeof feature === 'undefined' ? featureId + ', ' : feature.name + ', ';
+    });
+
+    featuresString = featuresString.slice(0, -2);
+    featuresString += '</div>';
+  }
+
+  if (vendor.purposeIds.length > 0) {
+    purposesString = '<div class="as-oil-third-party-link">Purposes: ';
+
+    vendor.purposeIds.forEach(purposeId => {
+      let vendorListPurposes = typeof vendorList.purposes === 'undefined' ? getVendorList().purposes : vendorList.purposes;
+      let purpose = vendorListPurposes.find(purposeObject => purposeObject.id === purposeId);
+
+      purposesString += typeof purpose === 'undefined' ? purposeId + ', ' : purpose.name + ', ';
+    });
+
+    purposesString = purposesString.slice(0, -2);
+    purposesString += '</div>';
+  }
+
+  if (vendor.legIntPurposeIds.length > 0) {
+    legIntPurposesString = '<div class="as-oil-third-party-link">Ligitime Purposes: ';
+
+    vendor.legIntPurposeIds.forEach(legIntPurposeId => {
+      let vendorListPurposes = typeof vendorList.purposes === 'undefined' ? getVendorList().purposes : vendorList.purposes;
+      let legIntPurpose = vendorListPurposes.find(purposeObject => purposeObject.id === legIntPurposeId);
+
+      legIntPurposesString += typeof legIntPurpose === 'undefined' ? legIntPurposeId + ', ' : legIntPurpose.name + ', ';
+    });
+
+    legIntPurposesString = legIntPurposesString.slice(0, -2);
+    legIntPurposesString += '</div>';
+  }
+
   return `
           <div class="as-oil-third-party-list-element">
             <span onclick='${OIL_GLOBAL_OBJECT_NAME}._toggleViewElements(this)'>
@@ -189,6 +235,9 @@ const buildVendorEntry = (vendor) => {
             </span>
             <div class='as-oil-third-party-toggle-part' style='display: none;'>
               <a class='as-oil-third-party-link' href='${vendor.policyUrl}'>${vendor.policyUrl}</a>
+              ${featuresString}
+              ${purposesString}
+              ${legIntPurposesString}
             </div>
           </div>
         `;
@@ -236,4 +285,3 @@ function toggleTab(tab) {
   let sectionElement = document.getElementById(`as-js-tab-section-${id}`);
   sectionElement.style.display = 'block';
 }
-

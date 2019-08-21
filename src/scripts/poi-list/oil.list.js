@@ -146,7 +146,7 @@ function oilListTemplate(list, heading, text) {
                 ${heading}
             </div>
             <p class="as-oil__intro-txt">
-                ${text} 
+                ${text}
             </p>
             ${listSnippet(list)}
             ${BackButton()}
