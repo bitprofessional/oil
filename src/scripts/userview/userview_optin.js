@@ -22,6 +22,10 @@ import { isPoiActive } from '../core/core_config';
  * @return Promise with updated cookie value
  */
 export function oilPowerOptIn(privacySettings) {
+  if (typeof privacySettings.vendorConsents !== 'undefined') {
+    delete privacySettings.vendorConsents;
+  }
+
   return new Promise((resolve, reject) => {
     let soiCookiePromise;
     // Update Oil cookie (site - SOI)
@@ -64,11 +68,17 @@ export function oilPowerOptIn(privacySettings) {
  * @return {Promise} promise with updated cookie value
  */
 export function oilOptIn(privacySettings = PRIVACY_FULL_TRACKING) {
+  let vendorConsentSettings = false;
+
+  if (typeof privacySettings.vendorConsents !== 'undefined') {
+    vendorConsentSettings = privacySettings.vendorConsents;
+    delete privacySettings.vendorConsents;
+  }
+
   return new Promise((resolve, reject) => {
-    setSoiCookie(privacySettings).then(() => {
+    setSoiCookie(privacySettings, vendorConsentSettings).then(() => {
       sendEventToHostSite(EVENT_NAME_OPT_IN);
       resolve(true);
     }).catch((error) => reject(error));
   });
 }
-

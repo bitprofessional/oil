@@ -33,7 +33,9 @@ export const OIL_CONFIG = {
   ATTR_DEFAULT_TO_OPTIN: 'default_to_optin',
   ATTR_GDPR_APPLIES_GLOBALLY: 'gdpr_applies_globally',
   ATTR_GDPR_APPLIES: 'gdpr_applies',
-  ATTR_REQUIRE_OPTOUT_CONFIRM: 'require_optout_confirm'
+  ATTR_REQUIRE_OPTOUT_CONFIRM: 'require_optout_confirm',
+  ATTR_INCLUDE_LAYER_TO_DOM_ALWAYS: 'include_layer_to_dom_always',
+  ATTR_SHOW_COOKIE_PREFERENCES_LAYER: 'show_cookie_preferences_layer'
 };
 
 export const OIL_CONFIG_CPC_TYPES = {
@@ -86,9 +88,11 @@ export const DATAQA_PRIVACY_PAGE = 'oil-PrivacyPage';
 // Button labels
 export const JS_CLASS_BUTTON_OPTIN = 'as-js-optin';
 export const JS_CLASS_BUTTON_OILBACK = 'as-js-oilback';
+export const JS_CLASS_BUTTON_OILBACK_HIDE_CPC = 'as-js-oilback-hide-cpc';
 export const JS_CLASS_BUTTON_PROCEED = 'as-js-proceed';
 export const JS_CLASS_BUTTON_CANCEL = 'as-js-cancel';
 export const JS_CLASS_BUTTON_ADVANCED_SETTINGS = 'as-js-advanced-settings';
+export const JS_CLASS_BUTTON_ADVANCED_SETTINGS_WITH_HIDE_CPC = 'as-js-advanced-settings-with-hide-cpc';
 
 export const CSS_CLASS_OPTOUT_DIALOG = 'as-oil-optout-confirm';
 

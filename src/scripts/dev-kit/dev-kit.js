@@ -54,8 +54,8 @@ import { readOilConfig } from './oil-kit';
       showModal('reload', 'OIL will reload the configuration from the host’s website. This is like a full reload of OIL.js', '');
 
     },
-    showPreferenceCenter: function () {
-      window.AS_OIL.showPreferenceCenter();
+    showPreferenceCenter: function (hideCPC = false) {
+      window.AS_OIL.showPreferenceCenter(hideCPC);
       refreshSlider();
       showModal('reload', 'OIL will inject the Cookie Preference Center into your website. Please see "OIL CPC API" section in the configuration. This call is meant to inline the CPC into a part of your own website.', '');
 

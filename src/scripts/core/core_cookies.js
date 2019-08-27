@@ -92,7 +92,7 @@ export function setSoiCookieWithPoiCookieData(poiCookieJson) {
   });
 }
 
-export function buildSoiCookie(privacySettings) {
+export function buildSoiCookie(privacySettings, vendorConsentSettings = false) {
   return new Promise((resolve, reject) => {
     loadVendorListAndCustomVendorList().then(() => {
       let cookieConfig = getOilCookieConfig();
@@ -107,15 +107,24 @@ export function buildSoiCookie(privacySettings) {
         let returnValue = false;
 
         if (consentData.allowedPurposeIds.length <= 0) {
-          return returnValue;
+          if (vendorConsentSettings !== false && Object.keys(vendorConsentSettings).length > 0) {
+            if (typeof vendorConsentSettings[vendorId] === 'undefined') {
+              return returnValue;
+            }
+          }
         }
 
         returnValue = consentData.allowedPurposeIds.some(purposeId => vendor.purposeIds.indexOf(purposeId) >= 0);
+
+        if (vendorConsentSettings !== false && Object.keys(vendorConsentSettings).length > 0) {
+          returnValue = vendorConsentSettings[vendorId];
+        }
 
         return returnValue;
       });
 
       consentData.setVendorsAllowed(limitedVendorIds);
+
       resolve({
         opt_in: true,
         version: cookieConfig.defaultCookieContent.version,
@@ -132,9 +141,9 @@ export function buildSoiCookie(privacySettings) {
   });
 }
 
-export function setSoiCookie(privacySettings) {
+export function setSoiCookie(privacySettings, vendorConsentSettings) {
   return new Promise((resolve, reject) => {
-    buildSoiCookie(privacySettings).then((cookie) => {
+    buildSoiCookie(privacySettings, vendorConsentSettings).then((cookie) => {
       setDomainCookie(OIL_DOMAIN_COOKIE_NAME, cookie, getCookieExpireInDays());
       resolve(cookie);
     }).catch(error => reject(error));

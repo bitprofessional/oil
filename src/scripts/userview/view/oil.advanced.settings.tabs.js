@@ -3,19 +3,25 @@ import { OIL_LABELS } from '../userview_constants';
 import { forEach } from '../userview_modal';
 import { getLabel, getLabelWithDefault } from '../userview_config';
 import { getCustomPurposes, getCustomVendorListUrl } from '../../core/core_config';
-import { JS_CLASS_BUTTON_OPTIN, OIL_GLOBAL_OBJECT_NAME } from '../../core/core_constants';
+import { JS_CLASS_BUTTON_OPTIN, OIL_GLOBAL_OBJECT_NAME, OIL_VENDOR_CONSENT_SWITCH } from '../../core/core_constants';
 import { getCustomVendorList, getPurposes, getVendorList, getVendorsToDisplay } from '../../core/core_vendor_lists';
-import { BackButton, YesButton } from './components/oil.buttons';
+import { BackButton, YesButton, BackButtonHideCPC } from './components/oil.buttons';
 
-export function oilAdvancedSettingsTemplate() {
+export function oilAdvancedSettingsTemplate(hideCPC = false) {
   return `
     <div id="as-oil-cpc" class="as-oil-content-overlay" data-qa="oil-cpc-overlay">
-      ${oilAdvancedSettingsInlineTemplate()}
+      ${oilAdvancedSettingsInlineTemplate(hideCPC)}
     </div>
   `;
 }
 
-export function oilAdvancedSettingsInlineTemplate() {
+export function oilAdvancedSettingsInlineTemplate(hideCPC = false) {
+  let bckBtn = BackButton();
+
+  if (hideCPC) {
+    bckBtn = BackButtonHideCPC();
+  }
+
   return `
     <div class="as-oil-l-wrapper-layout-max-width as-oil-tabs-cpc__wrapper">
       <div class="as-oil-tabs-cpc__headline as-oil-center">
@@ -25,7 +31,7 @@ export function oilAdvancedSettingsInlineTemplate() {
         ${getLabel(OIL_LABELS.ATTR_LABEL_CPC_TEXT)}
       </p>
       <hr/>
-      ${BackButton()}
+      ${bckBtn}
       ${ContentSnippet()}
     </div>
   `;
@@ -37,6 +43,12 @@ export function attachCpcHandlers() {
   });
   forEach(document.querySelectorAll('.as-js-tab-label'), (domNode) => {
     domNode && domNode.addEventListener('click', event => toggleTab(event.target || event.srcElement), false);
+  });
+  forEach(document.querySelectorAll('.as-js-ven-cons-slider + .as-oil-cpc__slider'), (domNode) => {
+    domNode && domNode.addEventListener('click', event => handleVendorConsentSwitch(event.target || event.srcElement), false);
+  });
+  forEach(document.querySelectorAll('.as-js-purpose-slider + .as-oil-cpc__slider'), (domNode) => {
+    domNode.addEventListener('click', event => handlePurposesSwitch(event.target || event.srcElement), false)
   });
   const thirdPartiesLinkDomNode = document.getElementById('as-js-third-parties-link');
   thirdPartiesLinkDomNode && thirdPartiesLinkDomNode.addEventListener('click', toggleThirdPartyVisibility, false);
@@ -175,7 +187,69 @@ const IsCustomVendorsEnables = () => {
   return !!getCustomVendorListUrl();
 };
 
-const buildVendorEntry = (vendor, vendorList) => {
+function handlePurposesSwitch(event) {
+  let purposeId = event.previousSibling.previousSibling.getAttribute('data-id');
+  let checkedState = !event.previousSibling.previousSibling.checked;
+
+  forEach(document.querySelectorAll(`.as-js-ven-cons-slider + .as-oil-cpc__slider[data-ven-purpose-ids*="${purposeId}"]`), (vendorConsentSwitch) => {
+    let vendorConsentSwitchInput = vendorConsentSwitch.previousSibling.previousSibling;
+
+    if (vendorConsentSwitchInput.checked !== checkedState) {
+      vendorConsentSwitchInput.checked = checkedState;
+      vendorConsentSwitchInput.nextSibling.nextSibling.setAttribute('data-checked', checkedState);
+      let purposeIdsArray = vendorConsentSwitchInput.nextSibling.nextSibling.getAttribute('data-ven-purpose-ids').split(',');
+
+      forEach(purposeIdsArray, (purpId) => {
+        let vendorSwitchesWithPurposeId = document.querySelectorAll(`.as-js-ven-cons-slider + .as-oil-cpc__slider[data-ven-purpose-ids*="${purpId}"]:not([data-ven-id="${event.getAttribute('data-ven-id')}"]):not([data-checked="true"])`);
+
+        if (vendorSwitchesWithPurposeId.length <= 0) {
+          let purposeSwitch = document.querySelector(`#as-js-purpose-slider-${purpId}`);
+
+          if (purposeSwitch.checked === false && purposeSwitch !== event.previousSibling.previousSibling) {
+            purposeSwitch.checked = true;
+          }
+        } else {
+          let purposeSwitch = document.querySelector(`#as-js-purpose-slider-${purpId}`);
+
+          if (purposeSwitch.checked === true && purposeSwitch !== event.previousSibling.previousSibling) {
+            purposeSwitch.checked = false;
+          }
+        }
+      });
+    }
+  });
+}
+
+function handleVendorConsentSwitch(event) {
+  let purposeIds = event.getAttribute('data-ven-purpose-ids');
+  let checkedState = event.previousSibling.previousSibling.checked;
+  let purposeIdsArray = purposeIds.split(',');
+  event.setAttribute('data-checked', !checkedState);
+
+  if (checkedState === true) {
+    forEach(purposeIdsArray, (purposeId) => {
+      let purposeSwitch = document.querySelector(`#as-js-purpose-slider-${purposeId}`);
+
+      if (purposeSwitch.checked === true) {
+        purposeSwitch.checked = false;
+      }
+    });
+  } else if (checkedState === false) {
+    forEach(purposeIdsArray, (purposeId) => {
+      let vendorSwitchesWithPurposeId = document.querySelectorAll(`.as-js-ven-cons-slider + .as-oil-cpc__slider[data-ven-purpose-ids*="${purposeId}"]:not([data-ven-id="${event.getAttribute('data-ven-id')}"]):not([data-checked="true"])`);
+
+      if (vendorSwitchesWithPurposeId.length <= 0) {
+        let purposeSwitch = document.querySelector(`#as-js-purpose-slider-${purposeId}`);
+
+        if (purposeSwitch.checked === false) {
+          purposeSwitch.checked = true;
+        }
+      }
+    });
+  }
+}
+
+const buildVendorEntry = (vendor, vendorList, vendorConsents) => {
   let featuresString = '';
   let purposesString = '';
   let legIntPurposesString = '';
@@ -222,6 +296,11 @@ const buildVendorEntry = (vendor, vendorList) => {
     legIntPurposesString += '</div>';
   }
 
+  let cpcSwitch = `<label class="as-oil-tabs-cpc__switch">
+                    <input data-id="${vendor.id}" id="as-js-ven-cons-slider-${vendor.id}" class="as-js-ven-cons-slider" type="checkbox" name="oil-cpc-ven-cons-${vendor.id}" value="false">
+                    <span class="as-oil-cpc__slider" data-ven-id="${vendor.id}" data-ven-purpose-ids="${vendor.purposeIds}"></span>
+                  </label>`;
+
   return `
           <div class="as-oil-third-party-list-element">
             <span onclick='${OIL_GLOBAL_OBJECT_NAME}._toggleViewElements(this)'>
@@ -238,6 +317,7 @@ const buildVendorEntry = (vendor, vendorList) => {
               ${featuresString}
               ${purposesString}
               ${legIntPurposesString}
+              ${cpcSwitch}
             </div>
           </div>
         `;

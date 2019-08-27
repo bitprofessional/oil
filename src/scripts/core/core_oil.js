@@ -57,7 +57,16 @@ export function initOilLayer() {
          */
         sendEventToHostSite(EVENT_NAME_HAS_OPTED_IN);
         executeCommandCollection();
-        attachCommandCollectionFunctionToWindowObject();
+
+        import('../userview/locale/userview_oil.js')
+          .then(userview_modal => {
+            userview_modal.locale(uv_m => uv_m.renderOil({optIn: true}));
+            attachCommandCollectionFunctionToWindowObject();
+          })
+          .catch((e) => {
+            logError('Locale could not be loaded.', e);
+          });
+
         sendConsentInformationToCustomVendors().then(() => logInfo('Consent information sending to custom vendors after OIL start with found opt-in finished!'));
       } else {
         /**
@@ -139,9 +148,9 @@ function attachUtilityFunctionsToWindowObject() {
     return getSoiCookie();
   });
 
-  setGlobalOilObject('showPreferenceCenter', () => {
+  setGlobalOilObject('showPreferenceCenter', (hideCPC = false) => {
     loadLocale(userview_modal => {
-      userview_modal.oilShowPreferenceCenter();
+      userview_modal.oilShowPreferenceCenter(hideCPC);
     });
   });
 
@@ -173,5 +182,3 @@ function attachUtilityFunctionsToWindowObject() {
     return 'GDPR applied';
   });
 }
-
-

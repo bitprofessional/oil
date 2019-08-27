@@ -127,6 +127,29 @@
     padding: 1rem !important;
   }
 
+  &.as-oil-layer-cookie-pref {
+    padding: .5rem 5rem;
+
+    .as-oil-l-wrapper-layout-max-width {
+      text-align: center;
+    }
+
+    .as-oil-l-row {
+      margin: 0;
+
+      .as-oil-l-item {
+        text-align: center;
+
+        .as-oil__btn-cpc {
+          float: none;
+        }
+      }
+    }
+  }
+
+  &.as-oil-layer-hidden-cpc {
+    padding: 0 5rem;
+  }
 }
 
 // Text Styles

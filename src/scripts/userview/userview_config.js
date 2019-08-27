@@ -27,6 +27,14 @@ export function getCpcType() {
   return getConfigValue(OIL_CONFIG.ATTR_CPC_TYPE, OIL_CONFIG_CPC_TYPES.CPC_TYPE_STANDARD);
 }
 
+export function getInclueLayerAlwaysToDom() {
+  return getConfigValue(OIL_CONFIG.ATTR_INCLUDE_LAYER_TO_DOM_ALWAYS, false);
+}
+
+export function showCookiePreferencesLayer() {
+  return getConfigValue(OIL_CONFIG.ATTR_SHOW_COOKIE_PREFERENCES_LAYER, false);
+}
+
 export function getLabel(labelName) {
   return getLabelWithDefault(labelName, labelName);
 }
