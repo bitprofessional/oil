@@ -1,4 +1,4 @@
-import { getCustomVendorListUrl, getIabVendorBlacklist, getIabVendorListUrl, getIabVendorWhitelist, getShowLimitedVendors } from './core_config';
+import { getCustomVendorListUrl, getIabVendorBlacklist, getIabVendorListUrl, getIabVendorWhitelist, getShowLimitedVendors, getPurposesFeaturesTranslationListUrl } from './core_config';
 import { logError, logInfo } from './core_log';
 import { fetchJsonData } from './core_utils';
 
@@ -32,12 +32,38 @@ export function loadVendorListAndCustomVendorList() {
       let iabVendorListUrl = getIabVendorListUrl();
       fetchJsonData(iabVendorListUrl)
         .then(response => {
-          sortVendors(response);
-          cachedVendorList = response;
-          loadCustomVendorList().then(() => {
-            pendingVendorListPromise = null;
-            resolve();
-          });
+          let purposesFeaturesTranslationListUrl = getPurposesFeaturesTranslationListUrl();
+
+          if (purposesFeaturesTranslationListUrl !== false) {
+            fetchJsonData(purposesFeaturesTranslationListUrl)
+              .then(transResponse => {
+                transResponse.purposes.forEach((purpose, index) => {
+                  if (response.purposes[index].id === purpose.id) {
+                    response.purposes[index].name = purpose.name;
+                    response.purposes[index].description = purpose.description;
+                  }
+                });
+                transResponse.features.forEach((feature, index) => {
+                  if (response.features[index].id === feature.id) {
+                    response.features[index].name = feature.name;
+                    response.features[index].description = feature.description;
+                  }
+                });
+                sortVendors(response);
+                cachedVendorList = response;
+                loadCustomVendorList().then(() => {
+                  pendingVendorListPromise = null;
+                  resolve();
+                });
+              });
+          } else {
+            sortVendors(response);
+            cachedVendorList = response;
+            loadCustomVendorList().then(() => {
+              pendingVendorListPromise = null;
+              resolve();
+            });
+          }
         })
         .catch(error => {
           logError(`OIL getVendorList failed and returned error: ${ error }. Falling back to default vendor list!`);

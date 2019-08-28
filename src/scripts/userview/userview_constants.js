@@ -20,6 +20,7 @@ export const OIL_LABELS = {
   ATTR_LABEL_CPC_ACTIVATE_ALL: 'label_cpc_activate_all',
   ATTR_LABEL_CPC_DEACTIVATE_ALL: 'label_cpc_deactivate_all',
   ATTR_LABEL_CPC_PURPOSE_DESC: 'label_cpc_purpose_desc',
+  ATTR_LABEL_CPC_PURPOSE_LEG_DESC: 'label_cpc_purpose_leg_desc',
   ATTR_LABEL_CPC_PURPOSE_OPTOUT_HEADING: 'label_cpc_purpose_optout_confirm_heading',
   ATTR_LABEL_CPC_PURPOSE_OPTOUT_TEXT: 'label_cpc_purpose_optout_confirm_text',
   ATTR_LABEL_CPC_PURPOSE_OPTOUT_PROCEED: 'label_cpc_purpose_optout_confirm_proceed',

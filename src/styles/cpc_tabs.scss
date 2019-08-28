@@ -36,7 +36,8 @@
       text-overflow: ellipsis;
       transition: all 0.3s ease-in-out;
       vertical-align: middle;
-      white-space: nowrap;
+      height: auto;
+      padding: .5rem;
 
       @include media('<=phone') {
         display: table-header-group;

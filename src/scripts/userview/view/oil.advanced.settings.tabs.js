@@ -199,6 +199,10 @@ function handlePurposesSwitch(event) {
       vendorConsentSwitchInput.nextSibling.nextSibling.setAttribute('data-checked', checkedState);
       let purposeIdsArray = vendorConsentSwitchInput.nextSibling.nextSibling.getAttribute('data-ven-purpose-ids').split(',');
 
+      if (purposeIdsArray.length === 1 && purposeIdsArray[0] === '') {
+        return false;
+      }
+
       forEach(purposeIdsArray, (purpId) => {
         let vendorSwitchesWithPurposeId = document.querySelectorAll(`.as-js-ven-cons-slider + .as-oil-cpc__slider[data-ven-purpose-ids*="${purpId}"]:not([data-ven-id="${event.getAttribute('data-ven-id')}"]):not([data-checked="true"])`);
 
@@ -225,6 +229,10 @@ function handleVendorConsentSwitch(event) {
   let checkedState = event.previousSibling.previousSibling.checked;
   let purposeIdsArray = purposeIds.split(',');
   event.setAttribute('data-checked', !checkedState);
+
+  if (purposeIdsArray.length === 1 && purposeIdsArray[0] === '') {
+    return false;
+  }
 
   if (checkedState === true) {
     forEach(purposeIdsArray, (purposeId) => {
@@ -269,7 +277,7 @@ const buildVendorEntry = (vendor, vendorList, vendorConsents) => {
   }
 
   if (vendor.purposeIds.length > 0) {
-    purposesString = '<div class="as-oil-third-party-link">Purposes: ';
+    purposesString = `<div class="as-oil-third-party-link">${getLabel(OIL_LABELS.ATTR_LABEL_CPC_PURPOSE_DESC)}: `;
 
     vendor.purposeIds.forEach(purposeId => {
       let vendorListPurposes = typeof vendorList.purposes === 'undefined' ? getVendorList().purposes : vendorList.purposes;
@@ -283,7 +291,7 @@ const buildVendorEntry = (vendor, vendorList, vendorConsents) => {
   }
 
   if (vendor.legIntPurposeIds.length > 0) {
-    legIntPurposesString = '<div class="as-oil-third-party-link">Ligitime Purposes: ';
+    legIntPurposesString = `<div class="as-oil-third-party-link">${getLabel(OIL_LABELS.ATTR_LABEL_CPC_PURPOSE_LEG_DESC)}: `;
 
     vendor.legIntPurposeIds.forEach(legIntPurposeId => {
       let vendorListPurposes = typeof vendorList.purposes === 'undefined' ? getVendorList().purposes : vendorList.purposes;

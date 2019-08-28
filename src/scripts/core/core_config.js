@@ -259,3 +259,6 @@ export function getShowLimitedVendors() {
   return getConfigValue(OIL_CONFIG.ATTR_SHOW_LIMITED_VENDORS_ONLY, false);
 }
 
+export function getPurposesFeaturesTranslationListUrl() {
+  return getConfigValue(OIL_CONFIG.ATTR_PURPOSES_FEATURES_TRANSLATION_LIST_URL, false);
+}
