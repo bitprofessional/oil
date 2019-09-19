@@ -74,6 +74,8 @@ export function renderOil(props) {
         if (wrapper.classList.contains('oil-layer-initial-load')) {
           wrapper.classList.remove('oil-layer-initial-load');
         }
+
+        wrapper.classList.add('oil-show-layer-always');
       } else {
         renderOilContentToWrapper(oilCPCHiddenWrapperTemplate());
       }
