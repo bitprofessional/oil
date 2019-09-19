@@ -68,6 +68,12 @@ export function renderOil(props) {
 
       if (showCookiePreferencesLayer()) {
         renderOilContentToWrapper(oilCookiePreferencesLayerTemplate());
+
+        let wrapper = document.querySelector('.as-oil');
+
+        if (wrapper.classList.contains('oil-layer-initial-load')) {
+          wrapper.classList.remove('oil-layer-initial-load');
+        }
       } else {
         renderOilContentToWrapper(oilCPCHiddenWrapperTemplate());
       }
@@ -95,6 +101,12 @@ function renderOilIfNoOptIn(props) {
     } else {
       startTimeOut();
       renderOilContentToWrapper(oilDefaultTemplate());
+
+      if (showCookiePreferencesLayer()) {
+        let wrapper = document.querySelector('.as-oil');
+        wrapper.classList.add('oil-layer-initial-load');
+        wrapper.classList.add('oil-show-layer-always');
+      }
     }
     sendEventToHostSite(EVENT_NAME_OIL_SHOWN);
   } else {

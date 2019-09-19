@@ -197,4 +197,8 @@
       background-color: $cpc-background-dark;
     }
   }
+
+  &.oil-show-layer-always {
+    display: block !important;
+  }
 }
