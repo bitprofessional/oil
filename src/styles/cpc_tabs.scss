@@ -40,7 +40,9 @@
       padding: .5rem;
 
       @include media('<=phone') {
-        display: table-header-group;
+        display: block;
+        width: 100% !important;
+        padding: .5rem;
         height: auto;
       }
     }

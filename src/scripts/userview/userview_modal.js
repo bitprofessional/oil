@@ -22,6 +22,7 @@ import {
 import { oilOptIn, oilPowerOptIn } from './userview_optin';
 import { deActivatePowerOptIn } from '../core/core_poi';
 import { oilDefaultTemplate } from './view/oil.default';
+import { oilDefaultPurposesOverviewTemplate } from './view/oil.default.purposes.overview';
 import { oilNoCookiesTemplate } from './view/oil.no.cookies';
 import { oilCPCHiddenWrapperTemplate } from './view/oil.cpc.hidden.wrapper';
 import { oilCookiePreferencesLayerTemplate } from './view/oil.cookie.preferences.layer';
@@ -29,12 +30,13 @@ import * as AdvancedSettingsStandard from './view/oil.advanced.settings.standard
 import * as AdvancedSettingsTabs from './view/oil.advanced.settings.tabs';
 import { logError, logInfo } from '../core/core_log';
 import { getCpcType, getTheme, getTimeOutValue, isOptoutConfirmRequired, isPersistMinimumTracking, getInclueLayerAlwaysToDom, showCookiePreferencesLayer } from './userview_config';
-import { gdprApplies, getAdvancedSettingsPurposesDefault, isPoiActive } from '../core/core_config';
+import { gdprApplies, getAdvancedSettingsPurposesDefault, isPoiActive, getPurposesFeaturesTranslationListUrl } from '../core/core_config';
 import { applyPrivacySettings, getPrivacySettings, getSoiConsentData } from './userview_privacy';
 import { activateOptoutConfirm } from './userview_optout_confirm';
 import { getPurposeIds, loadVendorListAndCustomVendorList } from '../core/core_vendor_lists';
 import { manageDomElementActivation } from '../core/core_tag_management';
 import { sendConsentInformationToCustomVendors } from '../core/core_custom_vendors';
+import { fetchJsonData } from '../core/core_utils';
 
 // Initialize our Oil wrapper and save it ...
 
@@ -102,7 +104,50 @@ function renderOilIfNoOptIn(props) {
       }
     } else {
       startTimeOut();
-      renderOilContentToWrapper(oilDefaultTemplate());
+
+      let purposesTranslationUrl = getPurposesFeaturesTranslationListUrl();
+
+      if (purposesTranslationUrl !== false) {
+        fetchJsonData(purposesTranslationUrl)
+        .then(purposesResponse => {
+          renderOilContentToWrapper(oilDefaultPurposesOverviewTemplate(purposesResponse.purposes));
+
+          let purposeDescriptions = document.querySelectorAll('.as-oil-default-purpose');
+
+          purposeDescriptions.forEach((purposeDescription) => {
+            purposeDescription.addEventListener('mouseenter', (evt) => {
+              let hoverElem = evt.target;
+              let x = hoverElem.getBoundingClientRect().left;
+              let y = hoverElem.getBoundingClientRect().top;
+              let hoverElemWidth = hoverElem.offsetWidth;
+              let description = hoverElem.querySelector('.as-oil-default-purpose-description');
+              let descriptionWidth = description.offsetWidth;
+              let descriptionHeight = description.offsetHeight;
+              let winWidth = window.innerWidth;
+              let oilWrapperElem = document.querySelector('.as-oil-l-wrapper-layout-max-width');
+              let oilWrapperElemX = oilWrapperElem.getBoundingClientRect().left;
+              let oilWrapperElemY = oilWrapperElem.getBoundingClientRect().top;
+
+              description.style.left = `${(x + (hoverElemWidth / 3) + descriptionWidth) > winWidth ?
+                (x + (hoverElemWidth / 3) - oilWrapperElemX) + (winWidth - (x + (hoverElemWidth / 3) + descriptionWidth)) - 16 :
+                x + (hoverElemWidth / 3) - oilWrapperElemX}px`;
+              description.style.top = `${(y - descriptionHeight + (hoverElem.offsetHeight / 4) - oilWrapperElemY)}px`;
+              description.classList.add('__show-description');
+            });
+
+            purposeDescription.addEventListener('mouseleave', (evt) => {
+              let hoverElem = evt.target;
+              let description = hoverElem.querySelector('.as-oil-default-purpose-description');
+
+              if (description.classList.contains('__show-description')) {
+                description.classList.remove('__show-description');
+              }
+            });
+          });
+        });
+      } else {
+        renderOilContentToWrapper(oilDefaultTemplate());
+      }
 
       if (showCookiePreferencesLayer()) {
         let wrapper = document.querySelector('.as-oil');

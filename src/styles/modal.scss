@@ -196,6 +196,85 @@
     max-width: 100%;
 
   }
+
+  #as-oil-default-purposes-overview {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+
+    .as-oil-default-purpose {
+      display: -ms-inline-flexbox;
+      display: inline-flex;
+      -ms-flex-pack: center;
+      justify-content: center;
+      -ms-flex-align: center;
+      align-items: center;
+      padding: .25rem .5rem;
+      margin-top: 10px;
+      border: 1px solid #767676;
+      border-radius: 5px;
+      font-size: .8rem;
+      cursor: default;
+
+      > span {
+        pointer-events: none;
+      }
+
+      &:not(:last-of-type) {
+        margin-right: 10px;
+      }
+
+      .as-oil-default-purpose-icon {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -ms-flex-align: center;
+        align-items: center;
+        background-color: #767676;
+        color: #fff;
+        font-size: 12px;
+        padding: 2px;
+        border-radius: 100%;
+        width: 1.1rem;
+        height: 1.1rem;
+        margin-left: 6px;
+        font-weight: bold;
+      }
+
+      .as-oil-default-purpose-description {
+        display: block;
+        position: absolute;
+        background-color: #767676;
+        color: #fff;
+        z-index: 999;
+        padding: .75rem;
+        box-shadow: 1px 0px 8px 0px rgba(0, 0, 0, .7);
+        opacity: 0;
+        visibility: hidden;
+        width: 600px;
+
+        @media (max-width: 991px) {
+          width: 450px;
+        }
+
+        @media (max-width: 767px) {
+          width: 300px;
+        }
+
+        &.__show-description {
+          visibility: visible;
+          opacity: 1;
+          transition: opacity .15s linear .5s;
+        }
+      }
+    }
+  }
 }
 
 .as-oil__intro-txt--link {
@@ -215,7 +294,7 @@
 }
 
 @mixin btn-shared {
-  min-width: 160px;
+  min-width: 180px;
   min-height: 42px;
   margin: 0;
   padding: 0.5rem 1rem;
@@ -312,20 +391,26 @@
 
 .as-oil__btn-cpc {
   float: right;
-  min-height: auto;
-  min-width: 135px;
   margin: 0.75rem 0;
-  padding: 4px;
-  font-size: 14px;
-  font-weight: 400;
   text-decoration: none;
-  background-color: transparent;
+  background-color: #969696;
+  color: #fff;
+  min-width: 180px;
+  min-height: 42px;
+  padding: 0.5rem 1rem;
+  font-size: 1.1rem;
+  font-weight: 700;
   border: none;
-  border-bottom: 1px solid;
-  border-radius: 0;
+  border-radius: 3px;
+  outline: none;
   cursor: pointer;
 
   @extend %button-theme;
+
+  &:hover {
+    background-color: #767676;
+    color: #fff;
+  }
 
   @include media('<=phone') {
     float: none;
