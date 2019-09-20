@@ -145,14 +145,20 @@ function renderOilIfNoOptIn(props) {
             });
           });
         });
+
+        if (showCookiePreferencesLayer()) {
+          let wrapper = document.querySelector('.as-oil');
+          wrapper.classList.add('oil-layer-initial-load');
+          wrapper.classList.add('oil-show-layer-always');
+        }
       } else {
         renderOilContentToWrapper(oilDefaultTemplate());
-      }
 
-      if (showCookiePreferencesLayer()) {
-        let wrapper = document.querySelector('.as-oil');
-        wrapper.classList.add('oil-layer-initial-load');
-        wrapper.classList.add('oil-show-layer-always');
+        if (showCookiePreferencesLayer()) {
+          let wrapper = document.querySelector('.as-oil');
+          wrapper.classList.add('oil-layer-initial-load');
+          wrapper.classList.add('oil-show-layer-always');
+        }
       }
     }
     sendEventToHostSite(EVENT_NAME_OIL_SHOWN);
