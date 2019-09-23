@@ -454,6 +454,11 @@
   margin: 0 auto;
 }
 
+.as-oil-l-wrapper-layout-max-width {
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
 .as-oil-l-item {
   float: right; // Fallback for non flexbox capable browsers
   clear: both; // Fallback for non flexbox capable browsers

@@ -4,7 +4,7 @@ import { forEach } from '../userview_modal';
 import { getLabel, getLabelWithDefault } from '../userview_config';
 import { getCustomPurposes, getCustomVendorListUrl } from '../../core/core_config';
 import { JS_CLASS_BUTTON_OPTIN, OIL_GLOBAL_OBJECT_NAME, OIL_VENDOR_CONSENT_SWITCH } from '../../core/core_constants';
-import { getCustomVendorList, getPurposes, getVendorList, getVendorsToDisplay } from '../../core/core_vendor_lists';
+import { getCustomVendorList, getPurposes, getFeatures, getVendorList, getVendorsToDisplay } from '../../core/core_vendor_lists';
 import { BackButton, YesButton, BackButtonHideCPC } from './components/oil.buttons';
 
 export function oilAdvancedSettingsTemplate(hideCPC = false) {
@@ -50,12 +50,20 @@ export function attachCpcHandlers() {
   forEach(document.querySelectorAll('.as-js-purpose-slider + .as-oil-cpc__slider'), (domNode) => {
     domNode.addEventListener('click', event => handlePurposesSwitch(event.target || event.srcElement), false)
   });
+  const asOilCpcFeatures = document.getElementById('as-oil-cpc-features')
+  asOilCpcFeatures && asOilCpcFeatures.addEventListener('click', toggleFeatureDescriptions, false);
   const thirdPartiesLinkDomNode = document.getElementById('as-js-third-parties-link');
   thirdPartiesLinkDomNode && thirdPartiesLinkDomNode.addEventListener('click', toggleThirdPartyVisibility, false);
 }
 
 const ContentSnippet = () => {
   return `
+    <div class="as-oil-tabs-cpc__feature-description as-oil-center as-oil-margin-top __inactive-feature-description" id="as-oil-cpc-features">
+      Features
+    </div>
+    <div class="as-oil-cpc__middle __features_middle">
+      ${buildFeatureEntreis(getFeatures())}
+    </div>
     <div class="as-oil-tabs-cpc__purpose-description as-oil-center as-oil-margin-top" id="as-oil-cpc-purposes">
       ${getLabel(OIL_LABELS.ATTR_LABEL_CPC_PURPOSE_DESC)}
     </div>
@@ -98,6 +106,12 @@ const PurposeTabLabelElement = ({id, label}) => {
   `;
 };
 
+const FeatureTabLabelElement = ({id, label}) => {
+  return `
+    <span data-feature-id="${id}" class="as-js-tab-label as-js-tab-feature-label ${id === 1 ? 'as-oil-tabs-cpc__feature-label-active' : 'as-oil-tabs-cpc__feature-label-inactive'}">${label}</span>
+  `;
+};
+
 const PurposeTabContentSnippet = ({id, text, featureTexts, isSelected}) => {
   return `
     <section id="as-js-tab-section-${id}" class="as-oil-margin-top as-js-tab-section">
@@ -122,10 +136,27 @@ const buildPurposeFeatureTextsSnippet = (featureTexts) => {
   `;
 };
 
+const FeatureTabContentSnippet = ({id, text, isSelected}) => {
+  return `
+    <section id="as-js-tab-section-feature-${id}" class="as-oil-margin-top as-js-tab-section __feature-tab-section">
+      <div>
+        <p>${text}</p>
+      </div>
+    </section>
+  `;
+};
+
 const buildPurposeTabLabelElements = (purposes) => {
   return purposes.map(purpose => PurposeTabLabelElement({
     id: purpose.id,
     label: getLabelWithDefault(`label_cpc_purpose_${formatPurposeId(purpose.id)}_text`, purpose.name || `Error: Missing text for purpose with id ${purpose.id}!`)
+  })).join('');
+};
+
+const buildFeaturesTabLabelElements = (features) => {
+  return features.map(feature => FeatureTabLabelElement({
+    id: feature.id,
+    label: getLabelWithDefault(`label_cpc_purpose_${formatPurposeId(feature.id)}_text`, feature.name || `Error: Missing text for feature with id ${feature.id}!`)
   })).join('');
 };
 
@@ -137,6 +168,14 @@ const buildPurposeTabContentElements = (purposes) => {
     isSelected: false
   })).join('');
 };
+
+const buildFeaturesTabContentElements = (features) => {
+  return features.map(feature => FeatureTabContentSnippet({
+    id: feature.id,
+    text: getLabelWithDefault(`label_cpc_feature_${formatPurposeId(feature.id)}_desc`, feature.description || ''),
+    isSelected: false
+  })).join('');
+}
 
 const formatPurposeId = (id) => {
   return id < 10 ? `0${id}` : id;
@@ -167,6 +206,17 @@ const buildVendorEntries = () => {
     return 'Missing vendor list! Maybe vendor list retrieval has failed! Please contact web administrator!';
   }
 };
+
+const buildFeatureEntreis = (features) => {
+  return `
+  <div class="as-oil-tabs-cpc__feature-labels as-oil-margin-top">
+    ${buildFeaturesTabLabelElements(features)}
+  </div>
+  <div class="as-oil-tabs-cpc__feature-text as-oil-margin-top">
+    ${buildFeaturesTabContentElements(features)}
+  </div>
+  `;
+}
 
 const buildCustomVendorEntries = () => {
   let vendorList = getCustomVendorList();
@@ -355,21 +405,35 @@ function toggleFeatureTextsMarks(checkbox) {
   }
 }
 
-function toggleTab(tab) {
-  let tabLabelElements = document.getElementsByClassName('as-js-tab-label');
-  for (let i = 0; i < tabLabelElements.length; i++) {
-    tabLabelElements[i].classList.remove('as-oil-tabs-cpc__purpose-label-active');
-    tabLabelElements[i].classList.add('as-oil-tabs-cpc__purpose-label-inactive');
-  }
-  tab.classList.remove('as-oil-tabs-cpc__purpose-label-inactive');
-  tab.classList.add('as-oil-tabs-cpc__purpose-label-active');
+function toggleFeatureDescriptions() {
+  let featureDescription = document.getElementById('as-oil-cpc-features');
 
-  let tabSectionElements = document.getElementsByClassName('as-js-tab-section');
+  if (featureDescription.classList.contains('__inactive-feature-description')) {
+    featureDescription.classList.remove('__inactive-feature-description');
+    featureDescription.classList.add('__active-feature-description');
+  } else {
+    featureDescription.classList.remove('__active-feature-description');
+    featureDescription.classList.add('__inactive-feature-description');
+  }
+}
+
+function toggleTab(tab) {
+  let purposeOrFeature = tab.getAttribute('data-feature-id') === null ? 'purpose' : 'feature';
+
+  let tabLabelElements = purposeOrFeature === 'feature' ? document.getElementsByClassName('as-js-tab-feature-label') : document.querySelectorAll('.as-js-tab-label:not(.as-js-tab-feature-label)');
+  for (let i = 0; i < tabLabelElements.length; i++) {
+    tabLabelElements[i].classList.remove(`as-oil-tabs-cpc__${purposeOrFeature}-label-active`);
+    tabLabelElements[i].classList.add(`as-oil-tabs-cpc__${purposeOrFeature}-label-inactive`);
+  }
+  tab.classList.remove(`as-oil-tabs-cpc__${purposeOrFeature}-label-inactive`);
+  tab.classList.add(`as-oil-tabs-cpc__${purposeOrFeature}-label-active`);
+
+  let tabSectionElements = purposeOrFeature === 'feature' ? document.querySelectorAll('.__feature-tab-section') : document.querySelectorAll('.as-js-tab-section:not(.__feature-tab-section)');
   for (let i = 0; i < tabSectionElements.length; i++) {
     tabSectionElements[i].style.display = 'none';
   }
 
-  let id = tab.getAttribute('data-id');
-  let sectionElement = document.getElementById(`as-js-tab-section-${id}`);
+  let id = purposeOrFeature === 'feature' ? tab.getAttribute('data-feature-id') : tab.getAttribute('data-id');
+  let sectionElement = purposeOrFeature === 'feature' ? document.getElementById(`as-js-tab-section-feature-${id}`) : document.getElementById(`as-js-tab-section-${id}`);
   sectionElement.style.display = 'block';
 }

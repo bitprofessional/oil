@@ -103,6 +103,10 @@ export function getPurposes() {
   return cachedVendorList ? cachedVendorList.purposes : expandIdsToObjects(DEFAULT_VENDOR_LIST.purposeIds);
 }
 
+export function getFeatures() {
+  return cachedVendorList ? cachedVendorList.features : expandIdsToObjects(DEFAULT_VENDOR_LIST.featureIds);
+}
+
 export function getPurposeIds() {
   return getPurposes().map(({ id }) => id);
 }

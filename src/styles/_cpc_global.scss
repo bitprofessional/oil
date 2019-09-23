@@ -65,6 +65,10 @@ $slider-padding: 3px;
   @include media('<=phone') {
     padding: 0;
   }
+
+  &.__features_middle {
+    height: auto;
+  }
 }
 
 .checkmark {
