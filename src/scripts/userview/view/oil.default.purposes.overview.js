@@ -6,7 +6,7 @@ import { AdvancedSettingsButton, YesButton } from './components/oil.buttons.js';
 export function oilDefaultPurposesOverviewTemplate(purposes) {
   let purposesOverview = '';
 
-  purposes.forEach((purpose) => {
+  Array.prototype.slice.call(purposes).forEach((purpose) => {
     purposesOverview += `
       <span class="as-oil-default-purpose">
         <span>${purpose.name}</span>
