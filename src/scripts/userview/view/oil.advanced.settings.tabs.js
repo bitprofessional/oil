@@ -341,7 +341,7 @@ const buildVendorEntry = (vendor, vendorList, vendorConsents) => {
 
     vendor.featureIds.forEach(featureId => {
       let vendorListFeatures = typeof vendorList.features === 'undefined' ? getVendorList().features : vendorList.features;
-      let feature = vendorListFeatures.find(featureObject => featureObject.id === featureId);
+      let feature = vendorListFeatures.filter(featureObject => featureObject.id === featureId)[0];
 
       featuresString += typeof feature === 'undefined' ? featureId + ', ' : feature.name + ', ';
     });
@@ -355,7 +355,7 @@ const buildVendorEntry = (vendor, vendorList, vendorConsents) => {
 
     vendor.purposeIds.forEach(purposeId => {
       let vendorListPurposes = typeof vendorList.purposes === 'undefined' ? getVendorList().purposes : vendorList.purposes;
-      let purpose = vendorListPurposes.find(purposeObject => purposeObject.id === purposeId);
+      let purpose = vendorListPurposes.filter(purposeObject => purposeObject.id === purposeId)[0];
 
       purposesString += typeof purpose === 'undefined' ? purposeId + ', ' : purpose.name + ', ';
     });
@@ -369,7 +369,7 @@ const buildVendorEntry = (vendor, vendorList, vendorConsents) => {
 
     vendor.legIntPurposeIds.forEach(legIntPurposeId => {
       let vendorListPurposes = typeof vendorList.purposes === 'undefined' ? getVendorList().purposes : vendorList.purposes;
-      let legIntPurpose = vendorListPurposes.find(purposeObject => purposeObject.id === legIntPurposeId);
+      let legIntPurpose = vendorListPurposes.filter(purposeObject => purposeObject.id === legIntPurposeId)[0];
 
       legIntPurposesString += typeof legIntPurpose === 'undefined' ? legIntPurposeId + ', ' : legIntPurpose.name + ', ';
     });

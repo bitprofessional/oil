@@ -103,7 +103,7 @@ export function buildSoiCookie(privacySettings, vendorConsentSettings = false) {
       consentData.setPurposesAllowed(getStandardPurposesWithConsent(privacySettings));
 
       limitedVendorIds = limitedVendorIds.filter(vendorId => {
-        let vendor = consentData.vendorList.vendors.find(vendorObject => vendorObject.id === vendorId);
+        let vendor = consentData.vendorList.vendors.filter(vendorObject => vendorObject.id === vendorId)[0];
         let returnValue = false;
 
         if (consentData.allowedPurposeIds.length <= 0) {

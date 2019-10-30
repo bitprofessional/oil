@@ -11,7 +11,7 @@ export function sendConsentInformationToCustomVendors() {
         // TODO getSoiCookie is not sufficient - possibly required information is in poi cookie and soi cookie does not exist (see OIL-336)
         let cookie = getSoiCookie();
         if (cookie && cookie.consentData) {
-          customVendorList.vendors.forEach(customVendor => sendConsentInformationToCustomVendor(customVendor, cookie.consentData));
+          Array.prototype.slice.call(customVendorList.vendors).forEach(customVendor => sendConsentInformationToCustomVendor(customVendor, cookie.consentData));
         }
       }
     });

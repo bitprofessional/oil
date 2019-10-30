@@ -37,13 +37,13 @@ export function loadVendorListAndCustomVendorList() {
           if (purposesFeaturesTranslationListUrl !== false) {
             fetchJsonData(purposesFeaturesTranslationListUrl)
               .then(transResponse => {
-                transResponse.purposes.forEach((purpose, index) => {
+                Array.prototype.slice.call(transResponse.purposes).forEach((purpose, index) => {
                   if (response.purposes[index].id === purpose.id) {
                     response.purposes[index].name = purpose.name;
                     response.purposes[index].description = purpose.description;
                   }
                 });
-                transResponse.features.forEach((feature, index) => {
+                Array.prototype.slice.call(transResponse.features).forEach((feature, index) => {
                   if (response.features[index].id === feature.id) {
                     response.features[index].name = feature.name;
                     response.features[index].description = feature.description;
