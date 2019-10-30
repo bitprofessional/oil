@@ -13,6 +13,8 @@ export const OIL_LABELS = {
   ATTR_LABEL_THIRD_PARTY_LIST_HEADING: 'label_thirdparty_list_heading',
   ATTR_LABEL_THIRD_PARTY_LIST_TEXT: 'label_thirdparty_list_text',
   ATTR_LABEL_CUSTOM_THIRD_PARTY_HEADING: 'label_custom_thirdparty_heading',
+  ATTR_LABEL_THIRD_PARTY_NON_IAB: 'label_third_party_non_iab',
+  ATTR_LABEL_THIRD_PARTY_NON_IAB_TAB_TEXT: 'label_third_party_non_iab_tab_text',
 
   // CPC labels
   ATTR_LABEL_CPC_HEADING: 'label_cpc_heading',
