@@ -339,7 +339,7 @@ const buildVendorEntry = (vendor, vendorList, vendorConsents) => {
   if (vendor.featureIds.length > 0) {
     featuresString = '<div class="as-oil-third-party-link">Features: ';
 
-    Array.prototype.slice.call(vendor.featureIds).forEach(featureId => {
+    forEach(vendor.featureIds, (featureId) => {
       let vendorListFeatures = typeof vendorList.features === 'undefined' ? getVendorList().features : vendorList.features;
       let feature = vendorListFeatures.filter(featureObject => featureObject.id === featureId)[0];
 
@@ -353,7 +353,7 @@ const buildVendorEntry = (vendor, vendorList, vendorConsents) => {
   if (vendor.purposeIds.length > 0) {
     purposesString = `<div class="as-oil-third-party-link">${getLabel(OIL_LABELS.ATTR_LABEL_CPC_PURPOSE_DESC)}: `;
 
-    Array.prototype.slice.call(vendor.purposeIds).forEach(purposeId => {
+    forEach(vendor.purposeIds, (purposeId) => {
       let vendorListPurposes = typeof vendorList.purposes === 'undefined' ? getVendorList().purposes : vendorList.purposes;
       let purpose = vendorListPurposes.filter(purposeObject => purposeObject.id === purposeId)[0];
 
@@ -367,7 +367,7 @@ const buildVendorEntry = (vendor, vendorList, vendorConsents) => {
   if (vendor.legIntPurposeIds.length > 0) {
     legIntPurposesString = `<div class="as-oil-third-party-link">${getLabel(OIL_LABELS.ATTR_LABEL_CPC_PURPOSE_LEG_DESC)}: `;
 
-    Array.prototype.slice.call(vendor.legIntPurposeIds).forEach(legIntPurposeId => {
+    forEach(vendor.legIntPurposeIds, (legIntPurposeId) => {
       let vendorListPurposes = typeof vendorList.purposes === 'undefined' ? getVendorList().purposes : vendorList.purposes;
       let legIntPurpose = vendorListPurposes.filter(purposeObject => purposeObject.id === legIntPurposeId)[0];
 

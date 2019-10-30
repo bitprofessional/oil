@@ -114,7 +114,7 @@ function renderOilIfNoOptIn(props) {
 
           let purposeDescriptions = document.querySelectorAll('.as-oil-default-purpose');
 
-          purposeDescriptions.forEach((purposeDescription) => {
+          forEach(purposeDescriptions, (purposeDescription) => {
             purposeDescription.addEventListener('mouseenter', (evt) => {
               let hoverElem = evt.target;
               let x = hoverElem.getBoundingClientRect().left;

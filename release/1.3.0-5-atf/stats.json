@@ -1,28 +1,23 @@
 [
     {
         "name": "dist/0.1.3.0-5-atf-RELEASE.chunk.js",
-        "size": 76592,
-        "sizeGz": 16442
+        "size": 7767,
+        "sizeGz": 2579
     },
     {
         "name": "dist/1.1.3.0-5-atf-RELEASE.chunk.js",
-        "size": 5662,
-        "sizeGz": 2386
+        "size": 3740,
+        "sizeGz": 1663
     },
     {
         "name": "dist/2.1.3.0-5-atf-RELEASE.chunk.js",
-        "size": 7780,
-        "sizeGz": 2558
-    },
-    {
-        "name": "dist/3.1.3.0-5-atf-RELEASE.chunk.js",
-        "size": 878,
-        "sizeGz": 504
+        "size": 876,
+        "sizeGz": 503
     },
     {
         "name": "dist/hub.1.3.0-5-atf-RELEASE.min.js",
-        "size": 66445,
-        "sizeGz": 21027
+        "size": 152642,
+        "sizeGz": 41667
     },
     {
         "name": "dist/hub.html",
@@ -31,17 +26,17 @@
     },
     {
         "name": "dist/oil.1.3.0-5-atf-RELEASE.min.js",
-        "size": 77834,
-        "sizeGz": 24111
+        "size": 155862,
+        "sizeGz": 42336
     },
     {
         "name": "dist/oildevkit.1.3.0-5-atf-RELEASE.min.js",
-        "size": 30731,
-        "sizeGz": 10484
+        "size": 30725,
+        "sizeGz": 10475
     },
     {
         "name": "dist/oilstub.1.3.0-5-atf-RELEASE.min.js",
         "size": 2012,
-        "sizeGz": 1002
+        "sizeGz": 1001
     }
 ]

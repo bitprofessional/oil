@@ -1,6 +1,7 @@
 import { getCustomVendorListUrl, getIabVendorBlacklist, getIabVendorListUrl, getIabVendorWhitelist, getShowLimitedVendors, getPurposesFeaturesTranslationListUrl } from './core_config';
 import { logError, logInfo } from './core_log';
 import { fetchJsonData } from './core_utils';
+import { forEach } from './../userview/userview_modal';
 
 export const DEFAULT_VENDOR_LIST = {
   vendorListVersion: 36,
@@ -37,13 +38,13 @@ export function loadVendorListAndCustomVendorList() {
           if (purposesFeaturesTranslationListUrl !== false) {
             fetchJsonData(purposesFeaturesTranslationListUrl)
               .then(transResponse => {
-                Array.prototype.slice.call(transResponse.purposes).forEach((purpose, index) => {
+                forEach(transResponse.purposes, (purpose, index) => {
                   if (response.purposes[index].id === purpose.id) {
                     response.purposes[index].name = purpose.name;
                     response.purposes[index].description = purpose.description;
                   }
                 });
-                Array.prototype.slice.call(transResponse.features).forEach((feature, index) => {
+                forEach(transResponse.features, (feature, index) => {
                   if (response.features[index].id === feature.id) {
                     response.features[index].name = feature.name;
                     response.features[index].description = feature.description;

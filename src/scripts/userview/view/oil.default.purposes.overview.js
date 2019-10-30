@@ -2,11 +2,12 @@ import { JS_CLASS_BUTTON_OPTIN } from '../../core/core_constants.js';
 import { getLabel, isAdvancedSettings } from '../userview_config.js';
 import { OIL_LABELS } from '../userview_constants.js';
 import { AdvancedSettingsButton, YesButton } from './components/oil.buttons.js';
+import { forEach } from './../userview_modal.js';
 
 export function oilDefaultPurposesOverviewTemplate(purposes) {
   let purposesOverview = '';
 
-  Array.prototype.slice.call(purposes).forEach((purpose) => {
+  forEach(purposes, (purpose) => {
     purposesOverview += `
       <span class="as-oil-default-purpose">
         <span>${purpose.name}</span>

@@ -1,6 +1,7 @@
 import { getCustomVendorList, loadVendorListAndCustomVendorList } from './core_vendor_lists';
 import { logError } from './core_log';
 import { getSoiCookie } from './core_cookies';
+import { forEach } from './../userview/userview_modal';
 
 export function sendConsentInformationToCustomVendors() {
   return loadVendorListAndCustomVendorList()
@@ -11,7 +12,7 @@ export function sendConsentInformationToCustomVendors() {
         // TODO getSoiCookie is not sufficient - possibly required information is in poi cookie and soi cookie does not exist (see OIL-336)
         let cookie = getSoiCookie();
         if (cookie && cookie.consentData) {
-          Array.prototype.slice.call(customVendorList.vendors).forEach(customVendor => sendConsentInformationToCustomVendor(customVendor, cookie.consentData));
+          forEach(customVendorList.vendors, (customVendor) => sendConsentInformationToCustomVendor(customVendor, cookie.consentData));
         }
       }
     });
