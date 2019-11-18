@@ -1,4 +1,4 @@
-import {getSoiCookie} from './core_cookies';
+import {getSoiCookie, getCustomVendorSoiCookie} from './core_cookies';
 import {getCustomPurposeIds, gdprApplies} from './core_config';
 import {getLimitedVendorIds, getPurposeIds, getLimitedCustomVendorIds} from './core_vendor_lists';
 import {OIL_SPEC} from './core_constants';
@@ -18,7 +18,7 @@ export function getVendorConsentData(vendorIds) {
 }
 
 export function getCustomVendorConsentData(customVendorIds) {
-  let cookie = getSoiCookie();
+  let cookie = getCustomVendorSoiCookie();
 
   if (customVendorIds !== null) {
     for (let vend = 0; vend < customVendorIds.length; vend++) {
@@ -31,7 +31,7 @@ export function getCustomVendorConsentData(customVendorIds) {
       metadata: cookie.consentData.getMetadataString(),
       gdprApplies: gdprApplies(),
       hasGlobalScope: false,
-      purposeConsents: buildPurposeConsents(cookie.consentData.getPurposesAllowed(), getPurposeIds()),
+      purposeConsents: cookie.consentData.getPurposesAllowed() ? cookie.consentData.getPurposesAllowed() : [],
       vendorConsents: buildCustomVendorConsents(cookie, customVendorIds)
     };
   }
@@ -91,7 +91,7 @@ function buildVendorConsents(cookie, requestedVendorIds) {
 
 function buildCustomVendorConsents(cookie, requestedCustomVendorIds) {
   let customVendorIds = (requestedCustomVendorIds && requestedCustomVendorIds.length) ? requestedCustomVendorIds : getLimitedCustomVendorIds();
-  let allowedVendors = cookie.allowedCustomVendors;
+  let allowedVendors = cookie.consentData.getVendorsAllowed();
 
   return customVendorIds
     .reduce((map, customVendorId) => {

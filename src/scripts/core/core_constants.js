@@ -36,7 +36,8 @@ export const OIL_CONFIG = {
   ATTR_REQUIRE_OPTOUT_CONFIRM: 'require_optout_confirm',
   ATTR_INCLUDE_LAYER_TO_DOM_ALWAYS: 'include_layer_to_dom_always',
   ATTR_SHOW_COOKIE_PREFERENCES_LAYER: 'show_cookie_preferences_layer',
-  ATTR_PURPOSES_FEATURES_TRANSLATION_LIST_URL: 'purpose_feature_translation_list_url'
+  ATTR_PURPOSES_FEATURES_TRANSLATION_LIST_URL: 'purpose_feature_translation_list_url',
+  ATTR_CUSTOM_VBENDOR_COOKIE_NAME: 'custom_vendor_cookie_name'
 };
 
 export const OIL_CONFIG_CPC_TYPES = {

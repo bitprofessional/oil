@@ -195,21 +195,21 @@ const buildPurposeEntries = (purposes) => {
       ${buildPurposeTabLabelElements(purposes)}
       ${IsCustomVendorsEnables() ? `
         <span></span>
-        <span data-id="${purposes[purposes.length - 1].id + 1}" data-non-iab="true" class="as-js-tab-label as-oil-tabs-cpc__purpose-label-inactive">${getLabel(OIL_LABELS.ATTR_LABEL_THIRD_PARTY_NON_IAB_TAB_TEXT)}</span>
+        <span data-id="9" data-non-iab="true" class="as-js-tab-label as-oil-tabs-cpc__purpose-label-inactive">${getLabel(OIL_LABELS.ATTR_LABEL_THIRD_PARTY_NON_IAB_TAB_TEXT)}</span>
        ` : ''}
     </div>
     <div class="as-oil-tabs-cpc__purpose-text as-oil-margin-top">
       ${buildPurposeTabContentElements(purposes)}
       ${IsCustomVendorsEnables() ? `
-        <section id="as-js-tab-section-${purposes[purposes.length - 1].id + 1}" class="as-oil-margin-top as-js-tab-section">
+        <section id="as-js-tab-section-9" class="as-oil-margin-top as-js-tab-section">
           <div>
             <p></p>
             <label class="as-oil-tabs-cpc__switch">
-              <input data-id="${purposes[purposes.length - 1].id + 1}" id="as-js-purpose-slider-${purposes[purposes.length - 1].id + 1}" class="as-js-purpose-slider" type="checkbox" name="oil-cpc-purpose-$${purposes[purposes.length - 1].id + 1}" value="false">
+              <input data-id="9" id="as-js-purpose-slider-9" class="as-js-purpose-slider cust-purpose-slider" type="checkbox" name="oil-cpc-purpose-9" value="false">
               <span class="as-oil-cpc__slider"></span>
             </label>
           </div>
-          <div class="as-oil-tabs-cpc__purpose-feature-texts as-oil-margin-top" id="purpose-feature-texts-${purposes[purposes.length - 1].id + 1}"></div>
+          <div class="as-oil-tabs-cpc__purpose-feature-texts as-oil-margin-top" id="purpose-feature-texts-9"></div>
         </section>
        ` : ''}
     </div>
@@ -245,10 +245,10 @@ const buildFeatureEntreis = (features) => {
 const buildCustomVendorEntries = () => {
   let vendorList = getCustomVendorList();
 
-  if (vendorList && !vendorList.isDefault && vendorList.vendors) {
+  if (vendorList && !vendorList.isDefault) {
     let listWrapped = vendorList.vendors.map((element) => {
       if (element.name) {
-        return buildVendorEntry(element, vendorList);
+        return buildCustomVendorEntry(element, vendorList);
       }
     });
     return `<div class="as-oil-poi-group-list">${listWrapped.join('')}</div>`;
@@ -330,6 +330,33 @@ function handleVendorConsentSwitch(event) {
     });
   }
 }
+
+const buildCustomVendorEntry = (vendor, vendorList, vendorConsents) => {
+  let cpcSwitch = `<label class="as-oil-tabs-cpc__switch">
+                    <input data-id="${vendor.id}" id="as-js-ven-cons-cust-slider-${vendor.id}" class="as-js-ven-cons-slider" type="checkbox" name="oil-cpc-ven-cons-${vendor.id}" value="false">
+                    <span class="as-oil-cpc__slider" data-ven-id="${vendor.id}" data-ven-purpose-ids="9"></span>
+                  </label>`;
+
+  let policyUrl = vendor.policyUrl !== '' && vendor.policyUrl !== null ? `<a class='as-oil-third-party-link' href='${vendor.policyUrl}'>${vendor.policyUrl}</a>` : '';
+
+  return `
+          <div class="as-oil-third-party-list-element">
+            <span onclick='${OIL_GLOBAL_OBJECT_NAME}._toggleViewElements(this)'>
+                <svg class='as-oil-icon-plus' width="10" height="10" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M5.675 4.328H10v1.344H5.675V10h-1.35V5.672H0V4.328h4.325V0h1.35z" fill="#0068FF" fill-rule="evenodd" fill-opacity=".88"/>
+                </svg>
+                <svg class='as-oil-icon-minus' style='display: none;' width="10" height="5" viewBox="0 0 10 5" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M0 0h10v1.5H0z" fill="#3B7BE2" fill-rule="evenodd" opacity=".88"/>
+                </svg>
+                <span class='as-oil-third-party-name'>${vendor.name}</span>
+            </span>
+            <div class='as-oil-third-party-toggle-part' style='display: none;'>
+              ${policyUrl}
+              ${cpcSwitch}
+            </div>
+          </div>
+        `;
+};
 
 const buildVendorEntry = (vendor, vendorList, vendorConsents) => {
   let featuresString = '';
@@ -472,9 +499,15 @@ function togglePurposeTab(tab) {
 
   if (nonIABVendors === true && tab.getAttribute('data-feature-id') === null) {
     document.getElementById('as-oil-third-party-iab-vendors').style.display = 'none';
-    document.getElementById('as-oil-third-party-non-iab-vendors').style.display = 'block';
+
+    if (document.getElementById('as-oil-third-party-non-iab-vendors') !== null) {
+      document.getElementById('as-oil-third-party-non-iab-vendors').style.display = 'block';
+    }
   } else {
     document.getElementById('as-oil-third-party-iab-vendors').style.display = 'block';
-    document.getElementById('as-oil-third-party-non-iab-vendors').style.display = 'none';
+
+    if (document.getElementById('as-oil-third-party-non-iab-vendors') !== null) {
+      document.getElementById('as-oil-third-party-non-iab-vendors').style.display = 'none';
+    }
   }
 }

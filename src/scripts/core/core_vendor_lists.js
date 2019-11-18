@@ -11,18 +11,20 @@ export const DEFAULT_VENDOR_LIST = {
 };
 
 export const DEFAULT_CUSTOM_VENDOR_LIST = {
-  'vendorListVersion': -1,
-  'isDefault': true,
-  'vendors': []
+  vendorListVersion: 1,
+  isDefault: true,
+  purposeIds: [9],
+  vendors: []
 };
 
 export let cachedVendorList;
 export let cachedCustomVendorList;
 export let pendingVendorListPromise = null;
+export let pendingCustomVendorListPromise = null;
 
-export function loadVendorListAndCustomVendorList() {
+export function loadVendorList() {
 
-  if (cachedVendorList && cachedCustomVendorList) {
+  if (cachedVendorList) {
     return new Promise(resolve => {
       resolve();
     });
@@ -38,13 +40,13 @@ export function loadVendorListAndCustomVendorList() {
           if (purposesFeaturesTranslationListUrl !== false) {
             fetchJsonData(purposesFeaturesTranslationListUrl)
               .then(transResponse => {
-                forEach(transResponse.purposes, (purpose, index) => {
+                Array.prototype.slice.call(transResponse.purposes).forEach((purpose, index) => {
                   if (response.purposes[index].id === purpose.id) {
                     response.purposes[index].name = purpose.name;
                     response.purposes[index].description = purpose.description;
                   }
                 });
-                forEach(transResponse.features, (feature, index) => {
+                Array.prototype.slice.call(transResponse.features).forEach((feature, index) => {
                   if (response.features[index].id === feature.id) {
                     response.features[index].name = feature.name;
                     response.features[index].description = feature.description;
@@ -52,26 +54,20 @@ export function loadVendorListAndCustomVendorList() {
                 });
                 sortVendors(response);
                 cachedVendorList = response;
-                loadCustomVendorList().then(() => {
-                  pendingVendorListPromise = null;
-                  resolve();
-                });
+                pendingVendorListPromise = null;
+                resolve();
               });
           } else {
             sortVendors(response);
             cachedVendorList = response;
-            loadCustomVendorList().then(() => {
-              pendingVendorListPromise = null;
-              resolve();
-            });
+            pendingVendorListPromise = null;
+            resolve();
           }
         })
         .catch(error => {
           logError(`OIL getVendorList failed and returned error: ${ error }. Falling back to default vendor list!`);
-          loadCustomVendorList().then(() => {
-            pendingVendorListPromise = null;
-            resolve();
-          });
+          pendingVendorListPromise = null;
+          resolve();
         });
     });
     return pendingVendorListPromise;
@@ -80,24 +76,33 @@ export function loadVendorListAndCustomVendorList() {
 }
 
 export function loadCustomVendorList() {
-  return new Promise(resolve => {
-    let customVendorListUrl = getCustomVendorListUrl();
-    if (!customVendorListUrl) {
-      cachedCustomVendorList = DEFAULT_CUSTOM_VENDOR_LIST;
+  if (cachedCustomVendorList) {
+    return new Promise(resolve => {
       resolve();
-    } else {
-      fetchJsonData(customVendorListUrl)
-        .then(response => {
-          cachedCustomVendorList = response;
-          resolve();
-        })
-        .catch(error => {
-          cachedCustomVendorList = DEFAULT_CUSTOM_VENDOR_LIST;
-          logError(`OIL getCustomVendorList failed and returned error: ${ error }. Falling back to default custom vendor list!`);
-          resolve();
-        });
-    }
-  });
+    });
+  } else {
+    pendingCustomVendorListPromise = new Promise(resolve => {
+      let customVendorListUrl = getCustomVendorListUrl();
+      if (!customVendorListUrl) {
+        cachedCustomVendorList = DEFAULT_CUSTOM_VENDOR_LIST;
+        resolve();
+      } else {
+        fetchJsonData(customVendorListUrl)
+          .then(response => {
+            cachedCustomVendorList = Object.assign(response, { purposes: [ { id: 9, name: null, description: null } ] });
+            pendingCustomVendorListPromise = null;
+            resolve();
+          })
+          .catch(error => {
+            cachedCustomVendorList = DEFAULT_CUSTOM_VENDOR_LIST;
+            logError(`OIL getCustomVendorList failed and returned error: ${ error }. Falling back to default custom vendor list!`);
+            pendingCustomVendorListPromise = null;
+            resolve();
+          });
+      }
+    });
+    return pendingCustomVendorListPromise;
+  }
 }
 
 export function getPurposes() {

@@ -67,16 +67,22 @@ export function oilPowerOptIn(privacySettings) {
  * @param privacySettings - defaults to '1' for FULL TRACKING
  * @return {Promise} promise with updated cookie value
  */
-export function oilOptIn(privacySettings = PRIVACY_FULL_TRACKING) {
+export function oilOptIn(privacySettings = PRIVACY_FULL_TRACKING, customVendorPrivacySettings = false) {
   let vendorConsentSettings = false;
+  let customVendorConsentSettings = false;
 
   if (typeof privacySettings.vendorConsents !== 'undefined') {
     vendorConsentSettings = privacySettings.vendorConsents;
     delete privacySettings.vendorConsents;
   }
 
+  if (typeof customVendorPrivacySettings.vendorConsents !== 'undefined') {
+    customVendorConsentSettings = customVendorPrivacySettings.vendorConsents;
+    delete customVendorPrivacySettings.vendorConsents;
+  }
+
   return new Promise((resolve, reject) => {
-    setSoiCookie(privacySettings, vendorConsentSettings).then(() => {
+    setSoiCookie(privacySettings, vendorConsentSettings, customVendorPrivacySettings, customVendorConsentSettings).then(() => {
       sendEventToHostSite(EVENT_NAME_OPT_IN);
       resolve(true);
     }).catch((error) => reject(error));

@@ -1,16 +1,15 @@
-import { getCustomVendorList, loadVendorListAndCustomVendorList } from './core_vendor_lists';
+import { getCustomVendorList, loadCustomVendorList } from './core_vendor_lists';
 import { logError } from './core_log';
-import { getSoiCookie } from './core_cookies';
+import { getCustomVendorSoiCookie } from './core_cookies';
 import { forEach } from './../userview/userview_modal';
 
 export function sendConsentInformationToCustomVendors() {
-  return loadVendorListAndCustomVendorList()
+  return loadCustomVendorList()
     .then(() => {
       let customVendorList = getCustomVendorList();
 
       if (customVendorList && !customVendorList.isDefault) {
-        // TODO getSoiCookie is not sufficient - possibly required information is in poi cookie and soi cookie does not exist (see OIL-336)
-        let cookie = getSoiCookie();
+        let cookie = getCustomVendorSoiCookie();
         if (cookie && cookie.consentData) {
           forEach(customVendorList.vendors, (customVendor) => sendConsentInformationToCustomVendor(customVendor, cookie.consentData));
         }
@@ -21,7 +20,7 @@ export function sendConsentInformationToCustomVendors() {
 function sendConsentInformationToCustomVendor(customVendor, consentData) {
   let allowedPurposeIds = consentData.getPurposesAllowed();
 
-  if (customVendor.purposeIds.every(purposeId => allowedPurposeIds.indexOf(purposeId) !== -1)) {
+  if (allowedPurposeIds.indexOf(9) !== -1) {
     executeCustomVendorScript('opt-in', customVendor.optInSnippet, customVendor);
   } else {
     executeCustomVendorScript('opt-out', customVendor.optOutSnippet, customVendor);

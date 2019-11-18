@@ -1,4 +1,4 @@
-import {getSoiCookie} from '../core/core_cookies';
+import {getSoiCookie, getCustomVendorSoiCookie} from '../core/core_cookies';
 import {PRIVACY_FULL_TRACKING} from '../core/core_constants';
 import {logInfo} from '../core/core_log';
 import {forEach} from './userview_modal';
@@ -7,6 +7,11 @@ import { getVendorConsentData, getCustomVendorConsentData } from '../core/core_c
 
 export function getSoiConsentData() {
   let soiCookie = getSoiCookie();
+  return soiCookie.opt_in ? soiCookie.consentData : undefined;
+}
+
+export function getCustomVendorSoiConsentData() {
+  let soiCookie = getCustomVendorSoiCookie();
   return soiCookie.opt_in ? soiCookie.consentData : undefined;
 }
 
@@ -22,15 +27,37 @@ export function getSoiConsentData() {
 export function getPrivacySettings() {
   if (document.querySelector('.as-js-purpose-slider')) {
     let result = {};
-    forEach(document.querySelectorAll('.as-js-purpose-slider'), (element) => {
+    forEach(document.querySelectorAll('.as-js-purpose-slider:not([class*="cust-purpose-slider"])'), (element) => {
       let element_id = element.dataset ? element.dataset.id : element.getAttribute('data-id');
       result[element_id] = element.checked;
     }, this);
 
-    if (document.querySelectorAll('.as-js-ven-cons-slider')) {
+    if (document.querySelectorAll('.as-js-ven-cons-slider:not([id*="cust"])')) {
       result = Object.assign(result, { vendorConsents: {} });
 
-      forEach(document.querySelectorAll('.as-js-ven-cons-slider'), (element) => {
+      forEach(document.querySelectorAll('.as-js-ven-cons-slider:not([id*="cust"])'), (element) => {
+        let element_id = element.dataset ? element.dataset.id : element.getAttribute('data-id');
+        result.vendorConsents[element_id] = element.checked;
+      });
+    }
+
+    return result;
+  }
+  return PRIVACY_FULL_TRACKING;
+}
+
+export function getCustomVendorPrivacySettings() {
+  if (document.querySelector('.as-js-purpose-slider')) {
+    let result = {};
+    forEach(document.querySelectorAll('.as-js-purpose-slider[class*="cust-purpose-slider"]'), (element) => {
+      let element_id = element.dataset ? element.dataset.id : element.getAttribute('data-id');
+      result[element_id] = element.checked;
+    }, this);
+
+    if (document.querySelectorAll('.as-js-ven-cons-slider[id*="cust"]')) {
+      result = Object.assign(result, { vendorConsents: {} });
+
+      forEach(document.querySelectorAll('.as-js-ven-cons-slider[id*="cust"]'), (element) => {
         let element_id = element.dataset ? element.dataset.id : element.getAttribute('data-id');
         result.vendorConsents[element_id] = element.checked;
       });
@@ -49,16 +76,10 @@ export function applyPrivacySettings(allowedPurposes) {
   }
 
   let vendorConsents = getVendorConsentData();
-  let customVendorConsents = getCustomVendorConsentData(null);
 
   forEach(Object.keys(vendorConsents.vendorConsents), (key) => {
     document.querySelector(`#as-js-ven-cons-slider-${key}`).checked = vendorConsents.vendorConsents[key];
     document.querySelector(`#as-js-ven-cons-slider-${key} + .as-oil-cpc__slider`).setAttribute('data-checked', vendorConsents.vendorConsents[key]);
-  });
-
-  forEach(Object.keys(customVendorConsents.vendorConsents), (key) => {
-    document.querySelector(`#as-js-ven-cons-slider-${key}`).checked = customVendorConsents.vendorConsents[key];
-    document.querySelector(`#as-js-ven-cons-slider-${key} + .as-oil-cpc__slider`).setAttribute('data-checked', customVendorConsents.vendorConsents[key]);
   });
 
   if (allowedPurposes === 1) {
@@ -78,4 +99,17 @@ export function applyPrivacySettings(allowedPurposes) {
       domNode && (domNode.checked = false);
     });
   }
+}
+
+export function applyCustomVendorPrivacySettings(allowedPurposes) {
+  logInfo('Apply privacy settings for custom vendors from cookie', allowedPurposes);
+
+  document.querySelector('#as-js-purpose-slider-9').checked = (allowedPurposes.indexOf(9) !== -1);
+
+  let customVendorConsents = getCustomVendorConsentData(null);
+
+  forEach(Object.keys(customVendorConsents.vendorConsents), (key) => {
+    document.querySelector(`#as-js-ven-cons-cust-slider-${key}`).checked = customVendorConsents.vendorConsents[key];
+    document.querySelector(`#as-js-ven-cons-cust-slider-${key} + .as-oil-cpc__slider`).setAttribute('data-checked', customVendorConsents.vendorConsents[key]);
+  });
 }

@@ -30,10 +30,10 @@ import * as AdvancedSettingsStandard from './view/oil.advanced.settings.standard
 import * as AdvancedSettingsTabs from './view/oil.advanced.settings.tabs';
 import { logError, logInfo } from '../core/core_log';
 import { getCpcType, getTheme, getTimeOutValue, isOptoutConfirmRequired, isPersistMinimumTracking, getInclueLayerAlwaysToDom, showCookiePreferencesLayer } from './userview_config';
-import { gdprApplies, getAdvancedSettingsPurposesDefault, isPoiActive, getPurposesFeaturesTranslationListUrl } from '../core/core_config';
-import { applyPrivacySettings, getPrivacySettings, getSoiConsentData } from './userview_privacy';
+import { gdprApplies, getAdvancedSettingsPurposesDefault, isPoiActive, getPurposesFeaturesTranslationListUrl, getCustomVendorListUrl } from '../core/core_config';
+import { applyPrivacySettings, getPrivacySettings, getCustomVendorPrivacySettings, getSoiConsentData, getCustomVendorSoiConsentData, applyCustomVendorPrivacySettings } from './userview_privacy';
 import { activateOptoutConfirm } from './userview_optout_confirm';
-import { getPurposeIds, loadVendorListAndCustomVendorList } from '../core/core_vendor_lists';
+import { getPurposeIds, loadVendorList, loadCustomVendorList } from '../core/core_vendor_lists';
 import { manageDomElementActivation } from '../core/core_tag_management';
 import { sendConsentInformationToCustomVendors } from '../core/core_custom_vendors';
 import { fetchJsonData } from '../core/core_utils';
@@ -167,12 +167,16 @@ function renderOilIfNoOptIn(props) {
   }
 }
 
+const IsCustomVendorsEnables = () => {
+  return !!getCustomVendorListUrl();
+};
+
 export function oilShowPreferenceCenter(hideCPC = false) {
   // We need the PowerGroupUi-Stuff for the CPC
   import('../poi-list/poi-info.js');
 
   // We need to make sure the vendor list is loaded before showing the cpc
-  loadVendorListAndCustomVendorList()
+  loadVendorList()
     .then(() => {
       // then we want the group list because it may contain group-wide iabVendorWhitelist or iabVendorBlacklist
       import('../poi-list/poi.group.list.js').then(poi_group_list => {
@@ -196,6 +200,22 @@ export function oilShowPreferenceCenter(hideCPC = false) {
             currentPrivacySettings = getAdvancedSettingsPurposesDefault() ? getPurposeIds() : [];
           }
           applyPrivacySettings(currentPrivacySettings);
+
+          if (IsCustomVendorsEnables()) {
+            loadCustomVendorList()
+              .then(() => {
+                let consentData = getCustomVendorSoiConsentData();
+
+                let currentPrivacySettings;
+                if (consentData) {
+                  currentPrivacySettings = consentData.getPurposesAllowed();
+                } else {
+                  currentPrivacySettings = [];
+                }
+                applyCustomVendorPrivacySettings(currentPrivacySettings);
+              })
+              .catch((error) => logError(error));
+          }
         });
       });
     })
@@ -426,11 +446,12 @@ function animateOptInButton() {
 
 function handleSoiOptIn() {
   let privacySetting = getPrivacySettings();
+  let customVendorPrivacySettings = getCustomVendorPrivacySettings();
   logInfo('Handling SOI with settings: ', privacySetting);
   trackPrivacySettings(privacySetting);
 
   if (shouldPrivacySettingBeStored(privacySetting)) {
-    return oilOptIn(privacySetting).then(() => {
+    return oilOptIn(privacySetting, customVendorPrivacySettings).then(() => {
       // FIXME should remove Wrapper
       renderOil({ optIn: true, firedOptIn: true });
       sendEventToHostSite(EVENT_NAME_SOI_OPT_IN);

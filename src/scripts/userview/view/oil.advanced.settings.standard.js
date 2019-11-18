@@ -213,4 +213,4 @@ function switchLeftMenuClass(element) {
   element.className += ` ${CLASS_NAME_FOR_ACTIVE_MENU_SECTION}`;
 }
 
-setGlobalOilObject('_switchLeftMenuClass', switchLeftMenuClass);
+//setGlobalOilObject('_switchLeftMenuClass', switchLeftMenuClass);
